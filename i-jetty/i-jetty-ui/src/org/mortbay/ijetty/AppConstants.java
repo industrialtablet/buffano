@@ -13,12 +13,13 @@ import android.util.Log;
 public class AppConstants {
 	
         //客户端组织ID，用来区别客户，可理解为客户代码
-        public static String ORGANIZE_ID = "1";//For 试用
+        //public static String ORGANIZE_ID = "1";//For 试用
         //public static String ORGANIZE_ID = "2";//For Brandon
         //public static String ORGANIZE_ID = "3";//For Test(aaaa,111111)
         //public static String ORGANIZE_ID = "4";//For  cshc:创视慧成科技有限公司
         //public static String ORGANIZE_ID = "5";//For  qwerty_sz
         //public static String ORGANIZE_ID = "6";//For  Barton
+        public static String ORGANIZE_ID = "7";//For  Barton
         
 	/*
 	 * 新版广告机客户端UI相关
