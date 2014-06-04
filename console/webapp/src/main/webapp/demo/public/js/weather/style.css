@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+
+.weather_1 {
+	font-family:\5fae\8f6f\96c5\9ed1;
+	text-align:left;
+	width:250px;
+	height:60px;
+	padding:10px;
+	background:#FFF;
+	opacity:0.9;
+	z-index:99999;
+	border:1px solid #CCC;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	-webkit-box-shadow: #CCC 0px 0px 5px;
+	-moz-box-shadow: #CCC 0px 0px 5px;
+	box-shadow: #CCC 0px 0px 5px;
+}
+.weather_1 h2{ line-height:16px;text-align:left; padding:0; margin:0; font-size:16px; font-weight:700; color:#555; text-indent:0;visibility:visible; background: none;}
+.weather_1_icon { width:100px; height:68px; float:left;}
+.weather_1_sunshine { background:url(images/style_1/sunshine_0.png) no-repeat;}
+.weather_1_cloudy { background-image:url(images/style_1/cloudy_0.png); background-repeat:no-repeat;}
+.weather_1_overcast { background:url(images/style_1/overcast_0.png) no-repeat;}
+.weather_1_rainy {background:url(images/style_1/rainy_0.png) no-repeat;}
+.weather_1_sleet { background:url(images/style_1/sleet_0.png) no-repeat;}
+.weather_1_snow { background:url(images/style_1/snow_0.png) no-repeat;}
+
+.weather_2 {
+	/*width:212px; height:480px;*/
+	/*background-color:#FF0;
+	border:#F00 solid 1px;*/
+}
+.weather_2_daytime {
+    background-color: #FFF;
+    height: 100%;
+}
+.weather_2_night {
+    background:url(images/style_2/night.jpg) repeat;
+    height: 100%;
+}
+.weather_2_box_a {
+    padding-top: 60px;
+	height:80px;
+}
+.weather_2_icon {
+	width:79px;
+	height:60px;
+	float:left;
+}
+.weather_2_temp {
+	float:left;
+	width:90px; height:60px;font-size:50px; font-weight:bold; font-family:SimHei; color:#36270c; text-shadow:1px 1px 1px #fff; line-height:69px;
+}
+.weather_2_tips{ width:185px; height:85px; margin-left:50px; margin-top:20px; font-size:24px; font-weight:bold; font-family:SimHei; color:#36270c; text-shadow:1px 1px 1px #fff; line-height:30px;}
+.weather_2_sunshine { background:url(images/style_2/sunshine.png) no-repeat;}
+.weather_2_cloudy { background-image:url(images/style_2/cloudy.png); background-repeat:no-repeat;}
+.weather_2_overcast { background:url(images/style_2/overcast.png) no-repeat;}
+.weather_2_rainy {background:url(images/style_2/rainy.png) no-repeat;}
+.weather_2_sleet { background:url(images/style_2/sleet.png) no-repeat;}
+.weather_2_snow { background:url(images/style_2/snow.png) no-repeat;}
+

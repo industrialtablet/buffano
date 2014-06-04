@@ -1,0 +1,50 @@
+START_ZONES			
+A = (0,0,1068,600)
+B = (0,601,1068,720)
+C = (1068,0,1280,120)
+D = (1068,120,1280,600)
+E = (1068,600,1280,720)
+F = (0,0,1268,720)
+END_ZONES
+
+DEFINE_SET (XXX)
+Video_1.avi, A, F, 0, I;
+Video_2.avi, A, F, 0, I;
+Video_3.avi, A, F, 0, I;
+Photo_1.jpg, A, F, 10, F;
+Photo_2.jpg, A, F, 10, F;
+Photo_3.jpg, A, F, 10, F;
+Video_4.avi, A, N, 30, I;
+Video_5.mpg, A, F, 0, I;
+News_RSS, B, N, 360, U;
+Scores_RSS, B, N, 180, L;
+Clock_1, C, N, Z, I;
+Weather_RSS, D, N, 30, I;
+Promo_1.jpg, D, F, 10, F;
+Promo_2.jpg, D, S, 15, R;
+Promo_3.jpg, D, S, 10, T;
+Logo.jpg, E, N, Z, I;
+END_SET
+
+DEFINE_SET (YYY)
+Video_Fireplace.avi, F, S, 0, I;
+END_SET
+
+DEFINE_SET (ZZZ)
+Video_Promo1.avi, F, S, 0, I;
+END_SET
+
+DEFINE_SET (ABC)
+Video_X.avi, A, S, 0, I;
+Video_Y.avi, A, S, 0, I;
+END_SET
+
+PLAY (XXX, DAYS = MO, TU, WE, TH, 04/01/14, 04/30/14, 06:00:00, 23:00:00, SLEEP)
+
+PLAY (YYY, DAYS = **, **/**/**, **/**/**, 09:00:00, 11:00:00, PREVIOUS)
+
+PLAY (YYY, DAYS = **, **/**/**, **/**/**, 14:00:00, 16:00:00, PREVIOUS)
+
+PLAY (ZZZ, DAYS = MO, TU, WED, 04/15/14, 04/22/14, 10:00:00, NIL, PREVIOUS)
+
+PLAY (ABC, DAYS = SA, SUN, 05/**/14, 05/**/14, 9:00:00, NIL, PREVIOUS)

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>org.mortbay.ijetty</groupId>
+   <artifactId>ijetty-parent</artifactId>
+   <version>3.2-SNAPSHOT</version>
+   <packaging>pom</packaging>
+   <name>I-Jetty :: Parent</name>
+   <description>Jetty on Android</description>
+
+   <modules>
+       <module>i-jetty-server</module>
+       <module>i-jetty-ui</module>
+   </modules>
+<!-- http://central.maven.org/maven2/com/google/android/android/  (4.0.1.2;4.1.1.4) -->
+   <properties>
+     <android.version>4.2.2</android.version>
+     <jetty.version>7.6.0.RC4</jetty.version>
+     <servlet.version>2.5-20081211</servlet.version>
+     <android.sdk.version>19</android.sdk.version>
+     <android.platform>platforms/android-${android.sdk.version}</android.platform>
+   </properties>
+
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>     
+    <repository>
+      <id>grepcode-id</id>
+      <url>http://www.eecs.qmul.ac.uk/~jamief/mvn/repo</url>
+      <name>grepcode</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  <!-- repositories>     
+    <repository>
+      <id>grepcode-id</id>
+      <url>http://repository.grepcode.com/java/ext</url>
+      <name>grepcode</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository-->
+    <!--repository>
+      <id>pyx4me-web-release</id>
+      <url>http://pyx4me.com/maven2-release</url>
+      <name>grepcode</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository--> 
+  </repositories>
+  <!-- repositories>
+    <repository>
+      <id>oss-jetty-snapshots</id>
+      <url>http://oss.sonatype.org/content/repositories/jetty-snapshots</url>
+      <name>Jetty Snapshots</name>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories -->
+</project>

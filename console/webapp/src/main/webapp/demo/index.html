@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Pragma" CONTENT="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>网络广告机系统</title>
+    <link href="public/style/style.css" rel="stylesheet" type="text/css"/>
+    <link href="public/style/gridster.css" rel="stylesheet" type="text/css"/>
+    <link href="public/style/jquery.gridster.css" rel="stylesheet" type="text/css"/>
+    <link href="public/style/jquery.bxslider.css" rel="stylesheet" type="text/css"/>
+    <link href="public/js/weather/style.css" rel="stylesheet" type="text/css"/>
+    <!--播放节目json数据-->
+    <script src="data/programs.js" type="text/javascript" charset="utf-8"></script>
+    <!--加载jquery-->
+    <script src="public/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--加载json-->
+    <script src="public/js/json/json.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--加载布局渲染插件-->
+    <script src="public/js/gridster/jquery.gridster.min.js"></script>
+   <!--加载图片轮播插件-->
+    <script src="public/js/bxslider/jquery.bxslider.min.js"></script>
+    <!--加载天气插件-->
+    <script src="public/js/weather/weather.js"></script>
+    <!--加载应用程序文件-->
+    <script src="app/common.js"></script>
+    <script src="app/app.js"></script>
+    <script type="text/javascript"  charset="utf-8">
+        $(document).ready(function () {
+            $("body").templet({
+                enableIa : true,
+                debug : true
+            });
+        });
+    </script>
+</head>
+<body></body>
+</html>

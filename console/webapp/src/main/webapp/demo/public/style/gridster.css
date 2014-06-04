@@ -1,0 +1,27 @@
+body{margin:0; padding:0; font-family:Verdana, Geneva, sans-serif; font-size:12px;}
+div,ul,li{margin:0; padding:0;}
+li{ list-style:none;}
+img{border:none}
+.clear{ clear:both;}
+ul {
+    list-style-type: none;
+}
+
+/*/
+/* gridster自定义
+/*/
+
+.gridster li {
+/*background-color: #999;border:#F00 solid 1px;*/
+
+}
+
+.gridster {
+    margin: 0 auto;
+/*    opacity: .8;
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
+    -o-transition: opacity .6s;
+    -ms-transition: opacity .6s;
+    transition: opacity .6s;*/
+}

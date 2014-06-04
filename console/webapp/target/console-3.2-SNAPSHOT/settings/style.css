@@ -1,0 +1,187 @@
+@charset "utf-8";
+
+/* 概况展示方块 ----------------------------------------- */
+.survey_box {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.survey_box .div_name {
+    clear: both;
+    color: #FFFFFF;
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    opacity: 0.7;
+    padding: 5px 10px;
+    /*text-transform: uppercase;*/
+}
+.survey_box .div_icon {
+    display: block;
+    float: left;
+    height: 80px;
+    padding-left: 15px;
+    padding-top: 10px;
+    width: 80px;
+}
+.survey_box .details {
+    float: right;
+    padding-right: 10px;
+}
+.survey_box .details .number {
+	color: #FFFFFF;
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+    padding-top: 25px;
+    text-align: right;
+}
+.survey_box .details .desc {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0;
+    text-align: right;
+}
+/* 绿色 */
+.survey_box.green {
+	background-color: #28B779;
+}
+.survey_box.green .div_name {
+	background-color: #10A062;
+}
+/* 蓝色 */
+.survey_box.blue {
+	background-color: #27A9E3;
+}
+.survey_box.blue .div_name {
+	background-color: #208DBE;
+}
+/* 紫色 */
+.survey_box.purple {
+	background-color: #852B99;
+}
+.survey_box.purple .div_name {
+	background-color: #6E1881;
+}
+/* 黄色 */
+.survey_box.yellow {
+	background-color: #FFB848;
+}
+.survey_box.yellow .div_name {
+	background-color: #CB871B;
+}
+/* 概况展示方块 END ----------------------------------------- */
+
+/* 常规容器 */
+.box {
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.box .box-header {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 36px;
+	line-height:36px;
+	padding:0 10px 0 10px;
+}
+
+/* 筛选容器 */
+.box_switch {
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+    margin-bottom: 10px;
+    margin-top: 10px;
+	padding:10px;
+}
+.box_switch .item {
+	line-height:30px;
+	border-bottom:#CCC solid 1px;
+}
+
+/* 自定义图标 */
+.c_icon_user_info {
+	background-image:url(../img/user_info.png);
+	width:64px;
+	height:64px;
+	float:left;
+}
+.c_icon_user_pwd {
+	background-image:url(../img/user_pwd.png);
+	width:64px;
+	height:64px;
+	float:left;
+}
+
+.btn.app {
+    border: 0 none;
+    border-radius: 10px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    margin: 2px;
+    padding: 12px 0 8px;
+    position: relative;
+    text-align: center;
+    width: 80px;
+}
+.btn.app .number {
+    font-size: 170%;line-height: 1 !important;
+}
+.btn.app .text {
+    font-size: 12px;line-height: 1 !important;
+}
+.btn.app.yellow {
+	background: linear-gradient(to bottom, #FFE8A5 0px, #FCD76A 100%) repeat-x scroll 0 0 #FEE088 !important;
+	color: #996633 !important;
+    text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) !important;
+	background-color: #FEE188 !important;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08) inset !important;
+}
+.btn.app.green {
+	background: linear-gradient(to bottom, #8EBF60 0px, #7DAA50 100%) repeat-x scroll 0 0 #87B87F !important;
+}
+.btn.app.grey {
+	background: linear-gradient(to bottom, #F4F4F4 0px, #E6E6E6 100%) repeat-x scroll 0 0 #EDEDED !important;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08) inset !important;
+	color: #5A5A5A !important;
+    text-shadow: 0 1px 1px #EEEEEE !important;
+}
+.btn.app.grey .number {
+	color: #478FCA !important;
+}
+.btn.app.pink {
+	background: linear-gradient(to bottom, #DB5E8C 0px, #CE3970 100%) repeat-x scroll 0 0 #D54C7E !important;
+	background-color: #D6487E !important;
+	color:#FFF;
+}
+.btn.app.black {
+	background: linear-gradient(to bottom, #898989 0px, #696969 100%) repeat-x scroll 0 0 #797979 !important;
+}
+.btn.app.blue {
+	background: linear-gradient(to bottom, #3B98D6 0px, #197EC1 100%) repeat-x scroll 0 0 #2A8BCC !important;
+}
+
+/* 列表附加信息 */
+.table .clickable {
+	color:#009;
+	cursor:pointer;
+	border-bottom:1px dashed #ccc;
+}
+
+/* 列表附加信息 */
+.from_item_80 {
+	width:100px; text-align:right;
+}
+
+

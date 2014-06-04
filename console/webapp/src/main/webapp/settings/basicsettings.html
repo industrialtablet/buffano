@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<body style=" background-image:url(bg_05.jpg);">
+<div class="modal hide fade" id="actionModal">
+  <div class="modal-header" style="background-color:#069;">
+    <div> &nbsp;</div>
+  </div>
+  <div class="modal-body" style="line-height:36px;">
+    <div style="margin-bottom:15px;">
+      <button id="play" class="btn btn-success btn-large" style="width:140px;">Play</button>
+      <button id="play_countdown_view" class="btn btn-large" style="width:320px;">Stop(<span id="count_down">15</span>)</button>
+    </div>
+    <div class="input-prepend"> <span class="add-on" style="width:100px; text-align:right; line-height:30px; height:30px;">NetwokType:</span>
+      <input type="text" id="network_type" class="span2" disabled="disabled" style="width:340px; line-height:30px; height:30px;">
+    </div>
+    <div class="input-prepend"> <span class="add-on" style="width:100px; text-align:right; line-height:30px; height:30px;">IP Address:</span>
+      <input type="text" id="ip_address" class="span2" disabled="disabled" style="width:340px; line-height:30px; height:30px;">
+    </div>
+    <div class="input-prepend"> <span class="add-on" style="width:100px; text-align:right; line-height:30px; height:30px;">Mac Address:</span>
+      <input type="text" id="mac_address" class="span2" disabled="disabled" style="width:340px; line-height:30px; height:30px;">
+    </div>
+    <div class="input-prepend"> <span class="add-on" style="width:100px; text-align:right; line-height:30px; height:30px;">Resolution:</span>
+      <input type="text" id="resolution" class="span2" disabled="disabled" style="width:340px; line-height:30px; height:30px;">
+    </div>    
+    <div>
+      <button id="settings" class="btn btn-inverse btn-large" style="width:230px;">Settings</button>
+      <button id="set_wifi" class="btn btn-inverse btn-large" style="width:230px;">WIFI Settings</button>
+    </div>
+    <div id="show_msg" style="line-height:36px; height:36px; text-align:center;"></div>
+  </div>
+</div>
+<!--  
+
+<script src='http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js'></script>
+-->
+
+<script src="jquery-1.7.2.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script language="javascript">
+$('#actionModal').modal({
+	'backdrop':false, 
+	'show':true
+}).css({
+	'width': 500,
+	'margin-left': function () {
+		return -($(this).width() / 2);
+	}
+});
+
+$('#left').click(function(){
+	var res = window.ia.movieViewPrepare(0,0,800,600);
+	console.log(res);
+	if(res)
+		$('#play_countdown_view').html('true');
+	else
+		$('#play_countdown_view').html('false');
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+
+$('#right').click(function(){
+	var res = window.ia.movieViewStarPlay(true);
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+
+$('#play').click(function(){
+	var res = window.ia.settingTimeOut();
+	$('#play_countdown_view').html('Loading......');
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+// 系统设置
+$('#settings').click(function(){
+	var res = window.ia.Settings();
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+// 设置无线网
+$('#set_wifi').click(function(){
+	var res = window.ia.wifiSet();
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+// 设置有线网
+$('#set_ether').click(function(){
+	var res = window.ia.ethSet();
+	ctrl = false;
+	$('#show_msg').html(res);
+});
+// 倒计时
+var count = 15;
+var ctrl = true;
+function countDown() {
+	count--;
+	$('#count_down').html(count)
+	if(ctrl) {
+		if(count > 0) {
+			setTimeout(countDown, 1000);
+		} else {
+			window.ia.settingTimeOut();
+			$('#play_countdown_view').html('Loading......');
+		}
+	}
+}
+
+function doRefreshUI() {
+	//Wifi status
+	//1. wifiManager.WIFI_STATE_DISABLED (1)
+	//2. wifiManager..WIFI_STATE_ENABLED (3)
+	//3. wifiManager..WIFI_STATE_DISABLING (0)
+	//4 wifiManager..WIFI_STATE_ENABLING  (2)
+	//alert(window.ia.getWifiStatus());
+	//$('#wifi_status').html('OK');
+	var networkType=window.ia.getNetworkType();
+	if(networkType == 'WIFI') {
+		$('#network_type').val('WIFI');
+	} else if(networkType == 'ethernet') {
+		$('#network_type').val('ethernet');
+	} else {
+		$('#network_type').val('unknown');
+	}
+	$('#ip_address').val(window.ia.getIp());
+	$('#mac_address').val(window.ia.getMac());
+	$('#resolution').val(window.ia.getResolution());
+}
+setInterval(doRefreshUI, 1000);
+//停止控制
+$('#play_countdown_view').click(function(){
+	ctrl = false;
+	$('#play_countdown_view').html('');
+});
+countDown();
+</script>
+</body>
+</html>

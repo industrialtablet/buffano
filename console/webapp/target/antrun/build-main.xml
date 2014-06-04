@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <mkdir dir="/home/smallstar/i-jetty-read-only/console/webapp/target/console-3.2-SNAPSHOT/WEB-INF/lib"/>
+  <jar update="true" basedir="/home/smallstar/i-jetty-read-only/console/webapp/target" includes="classes.dex" destfile="/home/smallstar/i-jetty-read-only/console/webapp/target/console-3.2-SNAPSHOT/WEB-INF/lib/classes.zip"/>
+</target>
+</project>
