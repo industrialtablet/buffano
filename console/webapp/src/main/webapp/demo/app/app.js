@@ -34,14 +34,14 @@ var gridster;
                     'width':1920,
                     'height':1080,
                     'widget_margins': [0, 0],
-                    'widget_base_dimensions': [158, 88],
+                    'widget_base_dimensions': [160, 90],
                     'min_cols': 12
                 },
                 '1080*1920': {
                     'width':1080,
                     'height':1920,
                     'widget_margins': [0, 0],
-                    'widget_base_dimensions': [88, 158],
+                    'widget_base_dimensions': [90, 160],
                     'min_cols': 12
                 },
                 '1366*768': {
@@ -124,6 +124,10 @@ var gridster;
             /*切换场景*/
             switchScenes : function() {
                 var nowTme = Math.round(new Date().getTime()/1000);
+                if($.isEmptyObject(programs['scenes'])) {
+                    opts._debug("scenes当前没有播放的内容！");
+                    return false;
+                }
                 var scenes =  programs['scenes'];
                 $.each(scenes, function(key, item) {
                     var startTime = item.time_start;

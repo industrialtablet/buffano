@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -58,6 +59,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -68,6 +70,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -646,7 +649,38 @@ public static void submitAppsList(final Handler pHandler) {
             }
     });
 }
-   
+
+public String getDisplayScreenSize()
+{
+    WindowManager w = getWindowManager();
+    Display d = w.getDefaultDisplay();
+    DisplayMetrics metrics = new DisplayMetrics();
+    d.getMetrics(metrics);
+    // since SDK_INT = 1;
+    int widthPixels = metrics.widthPixels;
+    int heightPixels = metrics.heightPixels;
+    // includes window decorations (statusbar bar/menu bar)
+    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+    try {
+        widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
+        heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
+    } catch (Exception ignored) 
+    {
+        Log.e("-->smallstar","getDisplayScreenSize error");
+    }
+    // includes window decorations (statusbar bar/menu bar)
+    if (Build.VERSION.SDK_INT >= 17)
+    try {
+        Point realSize = new Point();
+        Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
+        widthPixels = realSize.x;
+        heightPixels = realSize.y;
+    } catch (Exception ignored) 
+    {
+        Log.e("-->smallstar","getDisplayScreenSize error");
+    }
+    return String.valueOf(widthPixels) + "*" + String.valueOf(heightPixels); 
+}
 
     @Override
     protected void onDestroy()
@@ -684,9 +718,9 @@ public static void submitAppsList(final Handler pHandler) {
         sendBroadcast(autoStarIntent);
         
         //获取屏幕分辨率
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        AppConstants.RESOLUTION = String.valueOf(dm.widthPixels) + "*" + String.valueOf(dm.heightPixels);    //dm.widthPixels,dm.heightPixels
+        //DisplayMetrics dm = new DisplayMetrics();
+        //getWindowManager().getDefaultDisplay().getMetrics(dm);
+        AppConstants.RESOLUTION = getDisplayScreenSize(); //String.valueOf(dm.widthPixels) + "*" + String.valueOf(getDisplayScreenHeight());    //dm.widthPixels,dm.heightPixels
         
         //处理配置文件
         File clientProps = new File(IJetty.__JETTY_DIR+"/"+IJetty.__ETC_DIR+"/properties.xml");

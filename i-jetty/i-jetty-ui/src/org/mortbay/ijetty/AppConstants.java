@@ -25,17 +25,14 @@ public class AppConstants {
 	/*
 	 * 新版广告机客户端UI相关
 	 * */
+        //Test URL
 	//http://58.216.50.44/js/dzxsp/sbjgxsh.aspx?pjsdid=AA3F5755-C5E5-4541-B928-D784A21208F2
-	//mWebView.loadUrl("http://develowebs.com/testcode/IdeaRep/configuration/index.php");
-	//mWebView.loadUrl("file:///android_asset/basicsettings.html");
-	//mWebView.loadUrl("file:///mnt//external_sd//client//index.html");
-	//"file:///sdcard//external_sdcard//client//index.html";
+	//http://develowebs.com/testcode/IdeaRep/configuration/index.php
 	//http://dev-bnr.mxs.ca/display10.html;
-	//public static String CLIENT_UI_URL = "file:///android_asset/model/index.html";//"file:///android_asset/basicsettings.html";
 	public static String CLIENT_CUR_PLAYURL = "http://localhost:8080/console/settings/basicsettings.html";
 	public static String GROUP_ID = "";
 	
-	public static String RESOLUTION = "->unkonw";
+	public static String RESOLUTION = "unkonw";//分辨率
 	/**
 	 * 网络相关
 	 */
