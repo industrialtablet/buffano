@@ -8,3 +8,9 @@ git add .
 git commit -a -m "add buffano source code 2"
 git push -u buffano master
 git pull buffano master
+
+======================================
+Client TODO:
+
+======================================
+Server TODO:
