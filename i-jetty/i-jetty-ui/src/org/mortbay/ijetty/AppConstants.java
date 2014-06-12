@@ -29,10 +29,13 @@ public class AppConstants {
 	//http://58.216.50.44/js/dzxsp/sbjgxsh.aspx?pjsdid=AA3F5755-C5E5-4541-B928-D784A21208F2
 	//http://develowebs.com/testcode/IdeaRep/configuration/index.php
 	//http://dev-bnr.mxs.ca/display10.html;
-	public static String CLIENT_CUR_PLAYURL = "http://localhost:8080/console/settings/basicsettings.html";
+        public static String CLIENT_SETTINGS_PLAYURL = "http://localhost:8080/console/settings/basicsettings.html";
+        public static String CLIENT_DEFAULT2_PLAYURL = "http://localhost:8080/console/demo/index.html";
+        public static String CLIENT_CUR_PLAYURL = CLIENT_DEFAULT2_PLAYURL;
 	public static String GROUP_ID = "";
 	
 	public static String RESOLUTION = "unkonw";//分辨率
+	public static String URLPLAYLIST = "";
 	/**
 	 * 网络相关
 	 */

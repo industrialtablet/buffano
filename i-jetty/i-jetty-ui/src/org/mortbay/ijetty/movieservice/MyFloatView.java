@@ -82,7 +82,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	int videoHeight = 0; // 同上
 	boolean readyToPlayer = false;
 
-	public final static String LOGCAT = "->MyFloatView";
+	public final static String LOGCAT = "=>MyFloatView";
 
 	public static final String ACTION_DESTROY_MOVIE = "org.mortbay.ijetty.send.movie.Destroy";
 
@@ -401,7 +401,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	    mCurIndex = 0;
 	    if(playListJsonString.isEmpty())
 	    {
-	        Log.e("===smallstar===", "playListJsonString is null!");
+	        Log.e(LOGCAT, "playListJsonString is null!");
 	    }
 	    else
 	    {

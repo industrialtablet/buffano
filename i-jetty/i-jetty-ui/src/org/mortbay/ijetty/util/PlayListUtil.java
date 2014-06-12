@@ -34,6 +34,7 @@ import org.apache.http.util.EncodingUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mortbay.ijetty.AppConstants;
 import org.mortbay.ijetty.IJetty;
 import org.mortbay.ijetty.network.IRequestListener;
 import org.mortbay.ijetty.network.InterfaceOp;
@@ -131,7 +132,8 @@ public class PlayListUtil
                 IJetty.getInstance().mWebView.clearHistory();
                 IJetty.getInstance().mWebView.clearFormData();
                 IJetty.getInstance().mWebView.clearCache(true);
-                IJetty.getInstance().mWebView.reload();
+                IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_DEFAULT2_PLAYURL);
+                //IJetty.getInstance().mWebView.reload();
             }
         });
     }

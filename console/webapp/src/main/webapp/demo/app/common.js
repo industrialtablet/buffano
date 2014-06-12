@@ -3,25 +3,27 @@
  *
  * @class Utils
  */
-Utils = (function() {
-    var instance;
-    /**
-     * @class Utils
-     * @constructor
-     */
-    function Utils() {
-        instance = this;
-        return this;
+var Utils = {
+    _set:{
+        debug:true
+    },
+    debug:function(msg){
+        if (this._set.debug) {
+            if (typeof(console) != "undefined") console.log(msg);
+            else alert(msg);
+        }
+    },
+    /*将警告信息输出到页面*/
+    warn : function(msg, options) {
+         var opts = $.extend({
+            'consoleId' : $("body")
+         },options);
+        if(typeof opts.consoleId == 'object') {
+            var  $consoleId = opts.consoleId;
+            $consoleId.append("<div class='alert alert-info' ><h4>"+msg+"</h4></div>");
+        }
     }
-    return Utils;
-})();
-
-/**
- * Utils 类实例[全局]
- *
- * @attribute g_utils
- */
-g_utils = new Utils();
+};
 
 /**
  * 格式化时间

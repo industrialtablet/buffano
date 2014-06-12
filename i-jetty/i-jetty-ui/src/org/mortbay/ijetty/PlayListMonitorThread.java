@@ -55,7 +55,7 @@ public class PlayListMonitorThread {
 	public void shutdown() {
 	        if (threadStartFlag)
 	            thread.stop();
-	        Log.i(TAG,"HeartBeatThread thread.stop();");
+	        Log.i(TAG,"PlayListMonitorThread thread.stop();");
 	        doneFlag = true;
 	}
 	

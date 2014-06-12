@@ -105,12 +105,11 @@ var gridster;
 					var width = $('body').width();
 					$('body').css({
 						'background-color': '#2b9646'
-					}).append('<div style="width:'+width+'px;position:absolute;color:#FFF;font-size:36px;left:0;top:400px;">您的节目已经过期，请在管理平台重新编辑节目并发布！</div>');
+					}).append('<div style="width:'+width+'px;position:absolute;color:#FFF;font-size:36px;left:0;top:400px;">当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！</div>');
 				}
-				
                 opts.switchScenes();
                 if($.isEmptyObject(opts.curPlayScenes)) {
-                   opts._debug("当前没有播放的内容！");
+                   Utils.warn('当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！');
                    return false;
                 }
             },
@@ -137,14 +136,24 @@ var gridster;
                         /*如果不是当前播放的场景则切换播放场景*/
                         if(item.id != opts.curPlaySid || opts.curPlaySid < 0) {
                             opts._before_changeScenes();
-                            opts.curPlayScenes =  item;
-                            opts.makeGrid(item.widget, programs.screen);
                             /*标记当前播放场景ID*/
+                            opts.curPlayScenes =  item;
                             opts.curPlaySid = item.id;
+                            switch (item.mode) {
+                                case  'link' :
+                                    links.initialize();
+                                    links.push(item['play_task']['widget_0']);
+                                    return false;
+                                    break;
+                                default  :
+                                    opts.makeGrid(item.widget, programs.screen);
+                            }
                         }
-                        /*加载播放任务*/
-                        opts.loadPlayTask(item.widget, item.play_task);
-                        return true;
+                        if(item.mode != 'link') {
+                            /*加载播放任务*/
+                            opts.loadPlayTask(item.widget, item.play_task);
+                            return true;
+                        }
                     }
                 });
                 return true;
@@ -184,8 +193,8 @@ var gridster;
                         }
                         /*查询播放列表*/
                         if($.isEmptyObject(curPlayTask)){
+                            Utils.warn("当前广告位没有播放的任务", {consoleId: $("#widget_"+item.id)});
                             opts._debug("widget_"+item.id+"当前没有播放的任务！");
-                            return false;
                         }  else {
                             var playList = null;
                             var playListPrimKey = curPlayTask['play_list'];
@@ -195,7 +204,7 @@ var gridster;
                         }
                     }
                 });
-/*                opts._debug(opts.curPlayTaskIds);*/
+                /*opts._debug(opts.curPlayTaskIds);*/
                 return true;
             },
 
@@ -256,7 +265,8 @@ var gridster;
                     autoControls: false, //自动滚动的控制键
                     controls: false,   //隐藏左右按钮
                     pager:false, //display a pager
-                    captions: true //是否显示图片的标题，读取图片的title属性的内容。
+                    useCSS:false,
+                    captions: false //是否显示图片的标题，读取图片的title属性的内容。
                 });
             },
 
@@ -273,14 +283,15 @@ var gridster;
 
                 var $offset, playlist = [];
                 $offset = $widgetId.position();
+                opts._debug("播放列表:"+plays.lists);
                 $.each(plays.lists, function(key, lists) {
                     playlist.push({"file" : lists.url});
                 });
                 opts._debug("x="+$offset.left+",y="+ $offset.top+",width="+$widgetId.width()+", height="+$widgetId.height());
-                JavaVideo.movieViewPrepare($offset.left, $offset.top, $widgetId.width(), $widgetId.height() );
                 console.log(JSON.stringify(playlist));
                 JavaVideo.moviewViewSetPlayListJsonString(JSON.stringify(playlist));
 
+                JavaVideo.movieViewPrepare($offset.left, $offset.top, $widgetId.width(), $widgetId.height() );
                 var startPlay = setInterval(function() {
                     if(JavaVideo.getMovieViewPrepareStatus()) {
                         JavaVideo.movieViewStarPlay(true);
@@ -291,16 +302,16 @@ var gridster;
             },
 
             switchText : function($widgetId, widgetDivId, width, height, plays) {
+                if($.isEmptyObject(plays.lists)) {
+                    Utils.warn("很抱歉,当前广告位内容正在建设中", {consoleId: $widgetId});
+                    return false;
+                }
                 var widgetHtml = '';
                 widgetHtml += '<div class="newswrapper" style="width:'+width+'px; height:'+height+'px; ">' +
                     '<div class="news-list" id="quotation"><ul>';
-                if($.isEmptyObject(plays.lists)) {
-                    widgetHtml +='<li>很抱歉,内容正在建设中!</li>';
-                } else {
-                    $.each(plays.lists, function(j, lists) {
-                        widgetHtml +='<li>"'+lists.text+'"</li>';
-                    });
-                }
+                $.each(plays.lists, function(j, lists) {
+                    widgetHtml +='<li>"'+lists.text+'"</li>';
+                });
                 widgetHtml += '</ul></div></div>';
                 $widgetId.empty().append(widgetHtml);
                 $("#quotation ul").find("li").removeClass("gs-w");/*去掉布局插件生成的样式*/

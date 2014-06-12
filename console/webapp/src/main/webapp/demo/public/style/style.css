@@ -20,3 +20,36 @@ img{border:none}
 .news-list{width:85%; height:117px;overflow:hidden;margin:0 auto 0 auto;}
 .news-list li{ height:117px; margin-left:85px; font-size:26px; font-weight:bold;
     font-family:SimHei; color:#fff; line-height:40px; text-indent:30px; padding-top:3px; overflow:hidden;}
+
+/*提示信息样式*/
+.alert {
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+.alert h4 {
+    color: inherit;
+    margin-top: 0;
+}
+.alert .alert-link {
+    font-weight: bold;
+}
+.alert > p, .alert > ul {
+    margin-bottom: 0;
+}
+.alert > p + p {
+    margin-top: 5px;
+}
+
+.alert-info {
+    background-color: #D9EDF7;
+    border-color: #BCE8F1;
+    color: #31708F;
+}
+.alert-info hr {
+    border-top-color: #A6E1EC;
+}
+.alert-info .alert-link {
+    color: #245269;
+}
