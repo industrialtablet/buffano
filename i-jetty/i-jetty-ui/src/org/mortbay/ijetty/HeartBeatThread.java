@@ -90,10 +90,21 @@ public class HeartBeatThread
             {
                 try
                 {
+                    if(ApkUtils.isHome())
+                    {
+                        Log.e("smallstar", "is home!..................");
+                        ApkUtils.startApk("org.mortbay.ijetty", ".IJetty");
+                        IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                        //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
+                        IJetty.getInstance().mWebView.clearHistory();
+                        IJetty.getInstance().mWebView.clearFormData();
+                        IJetty.getInstance().mWebView.clearCache(true);
+                        IJetty.getInstance().mWebView.reload();
+                    }
                     //TODO:检查是否安装了软件管理工具，如果没有安装到指定地址下载安装
                     if(!ApkUtils.isBackgroundRunning(IJetty.getInstance(), "com.smallstar.androidlibapp"))
                     {
-                        //Log.e("smallstar", "com.smallstar.androidlibapp is not running.");
+                        Log.e("smallstar", "com.smallstar.androidlibapp is not running.");
                         ApkUtils.startApk("com.smallstar.androidlibapp", ".BootStartActivity");
                     }
 

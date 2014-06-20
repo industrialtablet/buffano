@@ -420,6 +420,67 @@ public class ApkUtils {
 	}
 	
 	
+	public static void startAppByPackageName(String packageName){  
+	        PackageInfo pi = null;  
+	        try {  
+	            pi = MainApplication.getInstance().getPackageManager().getPackageInfo(packageName, 0);  
+	        } catch (NameNotFoundException e) {  
+	            e.printStackTrace();  
+	        }  
+	           
+	        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);  
+	        //Intent resolveIntent = new Intent();  
+	        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);  
+	        resolveIntent.setPackage(pi.packageName);  
+	           
+	        List<ResolveInfo> apps = MainApplication.getInstance().getPackageManager().queryIntentActivities(resolveIntent, 0);  
+	           
+	        ResolveInfo ri = apps.iterator().next();  
+	        if (ri != null ) {  
+	            String packageName1 = ri.activityInfo.packageName;  
+	            String className = ri.activityInfo.name;  
+	               
+	            Intent intent = new Intent(Intent.ACTION_MAIN); 
+	            //Intent intent = new Intent(); 
+	            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	            intent.addCategory(Intent.CATEGORY_LAUNCHER);  
+	               
+	            ComponentName cn = new ComponentName(packageName1, className);  
+	               
+	            intent.setComponent(cn);  
+	            MainApplication.getInstance().startActivity(intent);  
+	        }  
+	          
+	    }  
+	
+	/** 
+	 * 获得属于桌面的应用的应用包名称 
+	 * @return 返回包含所有包名的字符串列表 
+	 */  
+	private static List<String> getHomes() {  
+	    List<String> names = new ArrayList<String>();  
+	    PackageManager packageManager = MainApplication.getInstance().getPackageManager();  
+	    //属性  
+	    Intent intent = new Intent(Intent.ACTION_MAIN);  
+	    intent.addCategory(Intent.CATEGORY_HOME);  
+	    List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent,  
+	            PackageManager.MATCH_DEFAULT_ONLY);  
+	    for(ResolveInfo ri : resolveInfo){  
+	        names.add(ri.activityInfo.packageName);  
+	        System.out.println(ri.activityInfo.packageName);  
+	    }  
+	    return names;  
+	}  
+	
+	/** 
+	 * 判断当前界面是否是桌面 
+	 */  
+	public static boolean isHome(){  
+	    ActivityManager mActivityManager = (ActivityManager)MainApplication.getInstance().getSystemService(Context.ACTIVITY_SERVICE);  
+	    List<RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);  
+	    return getHomes().contains(rti.get(0).topActivity.getPackageName());  
+	} 
+	
 	public static void startService( String pakcageName, String className) {
 
 		Intent intent = new Intent();
@@ -681,7 +742,7 @@ public class ApkUtils {
     public static boolean isBackgroundRunning(Context context, String packageName)
     {
         //判断应用是否在运行 
-        Log.i(TAG,"isBackgroundRunning().................");
+        //Log.i(TAG,"isBackgroundRunning().................");
         ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         KeyguardManager keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
         if (activityManager == null)

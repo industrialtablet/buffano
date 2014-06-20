@@ -72,6 +72,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -785,9 +786,13 @@ public String getDisplayScreenSize()
         setContentView(R.layout.jetty_controller);
         
         startButton = (Button)findViewById(R.id.start);
+        startButton.setVisibility(View.GONE);//隐藏
         stopButton = (Button)findViewById(R.id.stop);
+        stopButton.setVisibility(View.GONE);//隐藏
         configButton = (Button)findViewById(R.id.config);
+        configButton.setVisibility(View.GONE);//隐藏
         final Button downloadButton = (Button)findViewById(R.id.download);
+        downloadButton.setVisibility(View.GONE);//隐藏
        
         IntentFilter filter = new IntentFilter();
         filter.addAction(__START_ACTION);
@@ -919,10 +924,14 @@ public String getDisplayScreenSize()
 
    
         info = (TextView)findViewById(R.id.info);
+        info.setVisibility(View.GONE);
         footer = (TextView)findViewById(R.id.footer);
+        footer.setVisibility(View.GONE);
         console = (TextView)findViewById(R.id.console);
+        console.setVisibility(View.GONE);
         consoleScroller = (ScrollView)findViewById(R.id.consoleScroller);
-
+        consoleScroller.setVisibility(View.GONE);
+        
         StringBuilder infoBuffer = new StringBuilder(); 
         try
         {
@@ -963,6 +972,48 @@ public String getDisplayScreenSize()
         mWebView.stopLoading();
     }
     
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event)
+//    {
+//
+//        //获得触摸的坐标  
+//        float x = event.getX();
+//        float y = event.getY();
+//        switch (event.getAction())
+//        {
+//            //触摸屏幕时刻  
+//            case MotionEvent.ACTION_DOWN:
+////                Log.w(TAG, "MotionEvent.ACTION_DOWN");
+////                Toast.makeText(IJetty.getInstance().getApplicationContext(), "MotionEvent.ACTION_DOWN",
+////                Toast.LENGTH_SHORT).show();
+//                if (MyFloatView.mPlayViewPrepareStatus)
+//                {
+//                    Log.e("smallstar", "MyFloatView.mPlayViewPrepareStatus is true!");
+//                    MyFloatView.mPlayViewStatus = false;
+//                    MyFloatView.onExit();
+//                }
+//                if(!ApkUtils.isBackgroundRunning(IJetty.getInstance(), "com.suncco.weather"))
+//                {
+//                    Log.e("smallstar", "com.suncco.weather is not running.");
+//                    ApkUtils.startAppByPackageName("com.suncco.weather");
+//                }
+//                else
+//                {
+//                    Log.e("smallstar", "com.suncco.weather is running.");
+//                    ApkUtils.startAppByPackageName("com.suncco.weather");
+//                }
+//                break;
+//            //触摸并移动时刻  
+//            case MotionEvent.ACTION_MOVE:
+//
+//                break;
+//            //终止触摸时刻  
+//            case MotionEvent.ACTION_UP:
+//                break;
+//        }
+//        return true;
+//    }    
+    
     @Override  
     public boolean dispatchKeyEvent(KeyEvent event) {  
         Log.w(TAG, "onKeyDown");
@@ -975,6 +1026,7 @@ public String getDisplayScreenSize()
                 //响应事件的具体代码  
                 if (MyFloatView.mPlayViewPrepareStatus)
                 {
+                    Log.e("smallstar", "MyFloatView.mPlayViewPrepareStatus is true!");
                     MyFloatView.mPlayViewStatus = false;
                     MyFloatView.onExit();
                 }
@@ -990,16 +1042,6 @@ public String getDisplayScreenSize()
                     //mWebView.loadUrl("http://localhost:8080/console/settings/index.html");
                     mWebView.loadUrl("http://localhost:8080/console/settings/basicsettings.html");
                 }
-//                if (mWebView.canGoBack())
-//                {
-//                    mWebView.goBack();
-//                }
-//                else
-//                {
-//                    stopService(new Intent(this,DaemonService.class));
-//                    stopService(new Intent(this,IJettyService.class));
-//                    finish();
-//                }
             }  
             return true;  
         } 
