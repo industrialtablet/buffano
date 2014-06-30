@@ -1,0 +1,90 @@
+@charset "utf-8";
+/* CSS Document */
+.time_1 {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: SimHei;
+    color: #fff;
+    text-align: center;
+    background-color: #0089CA;
+    vertical-align: middle;
+    padding-top: 20px;
+}
+
+.time_2 {
+    background: url(images/timebg2.gif) left top no-repeat;
+    font-size: 20px;
+    font-family: SimHei;
+    color: #fff;
+    text-shadow: 1px 1px 1px #036996;
+    padding-top: 13px;
+    text-align: center;
+}
+
+.time_2 .hour {
+    height: 55px;
+    line-height: 55px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+.time_3 {
+    position: relative;
+    background:url(images/timebg3.png) left top no-repeat;
+}
+.time_3-box {
+    font-family: 'Microsoft Yahei',Arial;
+    height: 65px;
+    left: 0;
+    padding: 20px 0 17px 30px;
+    position: absolute;
+    top: 0;
+}
+.time_3-box {
+    color: #FFFFFF;
+    font-family: Microsoft Yahei;
+}
+.time_3-box p {
+    float: left;
+    white-space: nowrap;
+
+}
+.time_3-time {
+    font-size: 55px;
+    letter-spacing: 1px;
+    line-height: 65px;
+    margin-right: 7px;
+    margin-top: 0px;
+}
+.time_3-time span {
+    position: relative;
+    top: -5px;
+}
+.time_3-time .time_3-small {
+    font-size: 30px;
+    top: 0;
+}
+.time_3-small {
+    margin-left: 12px;
+}
+.time_3-datebox {
+    padding-top: 6px;
+}
+.time_3-datebox span {
+    display: block;
+    text-align: center;
+
+}
+.time_3-datebox .time_3-week {
+    font-size: 20px;
+    text-align: left;
+    margin-top: -10px;
+    margin-left: 12px;
+}
+.time_3-date {
+    font-size: 15px;
+    margin-left: 12px;
+}
+
