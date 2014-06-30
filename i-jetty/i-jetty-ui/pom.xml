@@ -13,6 +13,7 @@
    <name>I-Jetty :: Android Application</name>
    <description>Jetty on Android</description>
    <properties>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      <dep.classes.dir>${project.build.directory}/dependency-classes</dep.classes.dir>
      <war.classes.dir>${project.build.directory}/included-wars</war.classes.dir>
    </properties>
@@ -63,8 +64,8 @@
           <extensions>true</extensions>
           <configuration>
               <sdk>
-		  		  <path>/home/smallstar/android-sdks/</path>
-                  <platform>17</platform>
+		  		  <path>C:\adt-bundle-windows-x86_64-20131030\sdk</path>
+                  <platform>18</platform>
               </sdk>
               <deleteConflictingFiles>true</deleteConflictingFiles>
               <extractDuplicates>true</extractDuplicates> 

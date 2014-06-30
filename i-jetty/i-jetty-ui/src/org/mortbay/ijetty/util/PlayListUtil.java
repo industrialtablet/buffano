@@ -124,6 +124,7 @@ public class PlayListUtil
                 }
                 isPlayListChanged = false;
                 isPlayListFileSynced = false;
+                AppConstants.URLPLAYLIST = "";
                 //IJetty.getInstance().clearFormData();
                 SystemClock.sleep(10 * 1000);
                 //IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);

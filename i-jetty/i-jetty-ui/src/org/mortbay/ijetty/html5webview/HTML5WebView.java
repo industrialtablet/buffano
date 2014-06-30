@@ -1,10 +1,17 @@
 package org.mortbay.ijetty.html5webview;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.mortbay.ijetty.AppConstants;
 import org.mortbay.ijetty.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -198,6 +205,48 @@ public class HTML5WebView extends WebView {
          @Override
          public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
              callback.invoke(origin, true, false);
+         }
+         
+         private long timeout = 60000;  
+         //private WebView mWebView;  
+         private Timer mTimer;  
+         Handler mHandler = new Handler(){  
+            @Override  
+            public void handleMessage(Message msg) {  
+                switch(msg.what){         
+                       case AppConstants.MSG_PAGE_TIMEOUT :  
+                        //这里对已经显示出页面且加载超时的情况不做处理     
+//                          if(mWebView != null && mWebView.getProgress() < 100 &&  mWebView.getContentHeight() )       
+//                              load404Page() ;  
+                              break ;    
+                          }  
+                }  
+          };  
+            
+         public class MyWebViewClient extends WebViewClient {  
+             @Override  
+             public void onPageStarted(WebView view, String url, Bitmap favicon) {  
+                  // set url loading time out thread  
+                  mTimer = new Timer();  
+                  TimerTask tt = new TimerTask() {  
+                      @Override  
+                      public void run() {  
+                          Message m = new Message();  
+                          m.what = AppConstants.MSG_PAGE_TIMEOUT ;  
+                          mHandler.sendMessage(m);  
+                 
+                          mTimer.cancel();  
+                          mTimer.purge();  
+                     }  
+                 };  
+                 mTimer.schedule(tt, timeout);  
+             }  
+            
+             @Override  
+             public void onPageFinished(WebView view, String url) {  
+                  mTimer.cancel() ;  
+                  mTimer.purge() ;  
+             }
          }
     }
 	

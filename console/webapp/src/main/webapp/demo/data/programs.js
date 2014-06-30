@@ -1,20 +1,81 @@
-var programs = {"files": null, "time_end": 1405079400, "screen": "1280*720", "time_start": 1397440500, "scenes": [
-    {"id": 0, "play_list": {"play_102": {"lists": null}, "play_103": {"setting": {"color": "", "size": "", "mode": "", "background": ""}, "lists": [
-        {"url": "upload\/201404\/1397224911.jpg", "text": ""},
-        {"url": "upload\/201404\/1397224942.jpg", "text": ""}
-    ]}, "play_101": {"lists": [
-        {"url": "", "text": "按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地按时打算打算打算大声地"},
-        {"url": "", "text": "按时打扫打扫打扫的行车v虚伪而按时打扫打扫打扫的行车v虚伪而按时打扫打扫打扫的行车v虚伪而按时打扫打扫打扫的行车v虚伪而按时打扫打扫打扫的行车v虚伪而"}
-    ]}}, "time_end": 1405079400, "time_start": 1397440500, "widget": [
-        {"type_name": "", "id": 189, "size_x": 8, "col": 1, "size_y": 5, "type": "slide", "row": 1},
-        {"type_name": "", "id": 190, "size_x": 2, "col": 10, "size_y": 5, "type": "weather", "row": 2},
-        {"type_name": "", "id": 191, "size_x": 8, "col": 1, "size_y": 1, "type": "text", "row": 6},
-        {"type_name": "", "id": 192, "size_x": 2, "col": 10, "size_y": 1, "type": "time", "row": 1}
-    ], "play_task": {"widget_190": [
-        {"taskId": 102, "play_list": "play_102", "time_end": 1405079400, "time_start": 1397440500}
-    ], "widget_189": [
-        {"taskId": 103, "play_list": "play_103", "time_end": 1405079400, "time_start": 1397440500}
-    ], "widget_191": [
-        {"taskId": 101, "play_list": "play_101", "time_end": 1405079400, "time_start": 1397440500}
-    ], "widget_192": null}, "name": "测试节目"}
-], "mode": "usual", "name": "测试节目"};
+var programs = {
+	"name": "test",
+	"screen": "1280*720",
+	"time_start": 1403750400,
+	"time_end": 1404614400,
+	"scenes": [{
+		"id": 43,
+		"mode": "link",
+		"name": "Link",
+		"time_start": 1403770200,
+		"t_start": "2014-06-26 16:10:00",
+		"time_end": 1403788200,
+		"t_end": "2014-06-26 21:10:00",
+		"widget": null,
+		"play_task": {
+			"widget_0": [{
+				"taskId": 0,
+				"time_start": 1403770200,
+				"t_start": "2014-06-26 16:10:00",
+				"time_end": 1403788200,
+				"t_end": "2014-06-26 21:10:00",
+				"play_list": "http://www.baidu.com"
+			}]
+		},
+		"play_list": null
+	}, {
+		"id": 42,
+		"mode": "template",
+		"name": "Video",
+		"time_start": 1403789760,
+		"t_start": "2014-06-26 12:10:00",
+		"time_end": 1403796960,
+		"t_end": "2014-06-26 16:10:00",
+		"widget": [{
+			"id": 291,
+			"col": 1,
+			"row": 1,
+			"size_x": 10,
+			"size_y": 6,
+			"type": "image"
+		}],
+		"play_task": {
+			"widget_291": [{
+				"taskId": 1,
+				"time_start": 1403789760,
+				"t_start": "2014-06-26 12:10:00",
+				"time_end": 1403796960,
+				"t_end": "2014-06-26 16:10:00",
+				"play_list": "play_177"
+			}]
+		},
+		"play_list": {
+			"play_177": {
+				"lists": [{
+					"text": "",
+					"url": "upload/201404/1397210966.jpg"
+				}]
+			}
+		}
+	}, {
+		"id": 41,
+		"mode": "link",
+		"name": "Link",
+		"time_start": 1403750400,
+		"t_start": "2014-06-26 10:40:00",
+		"time_end": 1403755800,
+		"t_end": "2014-06-26 12:10:00",
+		"widget": null,
+		"play_task": {
+			"widget_0": [{
+				"taskId": 2,
+				"time_start": 1403750400,
+				"t_start": "2014-06-26 10:40:00",
+				"time_end": 1403755800,
+				"t_end": "2014-06-26 12:10:00",
+				"play_list": "http://www.baidu.com"
+			}]
+		},
+		"play_list": null
+	}]
+}

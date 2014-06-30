@@ -19,7 +19,7 @@ public class AppConstants {
         //public static String ORGANIZE_ID = "4";//For  cshc:创视慧成科技有限公司
         //public static String ORGANIZE_ID = "5";//For  qwerty_sz
         //public static String ORGANIZE_ID = "6";//For  Barton
-        //public static String ORGANIZE_ID = "7";//For  Barton
+        //public static String ORGANIZE_ID = "7";//For  Dojoo
         //public static String ORGANIZE_ID = "7";//For  Barton
         
 	/*
@@ -81,6 +81,7 @@ public class AppConstants {
 	public static final int MSG_CREATE_FLOW_WINDOW = 8;
 	public static final int MSG_DESTROY_FLOW_WINDOW = 9;
 	public static final int MSG_FOAT_FULL = 10;
+	public static final int MSG_PAGE_TIMEOUT = 11;
 	
 	/**
 	 * 下载完成广播

@@ -111,7 +111,7 @@ public class NetworkUtil {
 		try {
 			response = client.execute(request);
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				//Log.e("->NetworkUtil", "200 OK (HTTP/1.0 - RFC 1945)");
+				Log.e("->NetworkUtil", "200 OK (HTTP/1.0 - RFC 1945)");
 				httpEntity = response.getEntity();
 				if (isGB2312)
 					respStr = EntityUtils.toString(httpEntity, "GB2312");

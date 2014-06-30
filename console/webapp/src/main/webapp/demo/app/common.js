@@ -15,15 +15,73 @@ var Utils = {
     },
     /*将警告信息输出到页面*/
     warn : function(msg, options) {
-         var opts = $.extend({
+        var opts = $.extend({
             'consoleId' : $("body")
-         },options);
+        },options);
         if(typeof opts.consoleId == 'object') {
             var  $consoleId = opts.consoleId;
             $consoleId.append("<div class='alert alert-info' ><h4>"+msg+"</h4></div>");
         }
+    },
+    /*加载文件*/
+    _loadedFile: function() {
+        var temp = new Array();
+        var tempMethod = function(url, callback) {
+            // 第二次调用的时候就不=0了
+            var flag = 0;
+            for(i in temp) {
+                if(temp[i] == url) {
+                    flag = 1;
+                }
+            }
+            if(flag == 0) {
+                // 未载入过
+                temp[temp.length] = url;
+                // JQuery的ajax载入文件方式，如果有样式文件，同理在此引入相关样式文件
+                $.getScript(url, function() {
+                    if("undefined" != typeof(callback)) {
+                        if("function" == typeof(callback)) {
+                            callback();
+                        } else {
+                            eval(callback);
+                        }
+                    }
+                });
+            } else {
+                if("undefined" != typeof(callback)) {
+                    // 利用setTimeout 避免未定义错误
+                    setTimeout(callback, 200);
+                }
+            }
+        };
+        // 返回内部包函数，供外部调用并可以更改temp的值
+        return tempMethod;
+    },
+    _loadCss : function() {
+        var temp = new Array();
+        var tempMethod = function(url) {
+            // 第二次调用的时候就不=0了
+            var flag = 0;
+            for(i in temp) {
+                if(temp[i] == url) {
+                    flag = 1;
+                }
+            }
+            if(flag == 0) {
+                // 未载入过
+                temp[temp.length] = url;
+                var css = '<link href="'+url+'" rel="stylesheet" type="text/css">';
+                $('head').append(css);
+            }
+        };
+        // 返回内部包函数,供外部调用并可以更改temp的值
+        return tempMethod;
     }
 };
+
+//加载文件，支持回调函数 调用方式Utils.loadFile(url,callback)
+Utils.loadFile = Utils._loadedFile();
+Utils.loadCss = Utils._loadCss();
 
 /**
  * 格式化时间

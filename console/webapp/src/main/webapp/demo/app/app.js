@@ -28,6 +28,9 @@ var gridster;
             debug: true,
             /*是否开启视频播放器接口*/
             enableIa : false,
+            monitor: '',
+            /*支持的分辨率列表*/
+            screenList : ['1920*1080', '1080*1920','1366*768', '1280*720', '1024*600'],
             /*布局配置*/
             'settings': {
                 '1920*1080': {
@@ -71,7 +74,7 @@ var gridster;
             widgetW : 0,
             widgetH: 0,
             /*客户端心跳频率,每分钟一次*/
-            rateTime : 1000*60,//1000*60
+            rateTime : 1000*5,//1000*60
             /*加载数据*/
             getJson : function(){
                  if(programs == undefined || programs == '')  {
@@ -87,6 +90,32 @@ var gridster;
                 }
             },
 
+            /*加载垫底节目*/
+            loadTemp : function() {
+                var ws = window.screen.width;
+                var hs = window.screen.height;
+                var tempFileName = '';
+                if(contains(opts.screenList, ws+'*'+hs) != -1) {
+                    tempFileName = 'p_'+ws+'_'+hs+'.js';
+                } else {
+                    tempFileName = 'p_'+1280+'_'+720+'.js';
+                }
+                opts._debug('加载的垫底节目是：'+'data/temp/'+tempFileName);
+                Utils.loadFile('data/temp/'+tempFileName, function() {
+                    opts.switchScenes();
+                });
+                return false;
+            },
+
+            /*播放节目警告*/
+            warn : function() {
+                setTimeout(function() {
+                    var width = $('body').width();
+                    $('body').append('<div class="alert alert-info" style="position:absolute;color:#000;font-size:20px;left:120px;top:400px;">' +
+                        '当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！</div>');
+                }, 800);
+            },
+
             /*初始化*/
             init : function() {
                 JavaVideo.initialize(opts.enableIa);
@@ -94,7 +123,8 @@ var gridster;
             },
 
             handlerData : function() {
-				if(programs == undefined || programs == '')  {
+                if(typeof programs === 'undefined' || programs == '')  {
+                    opts.loadTemp();
                     opts._debug("加载的数据不能为空!");
                     return false;
                 }
@@ -102,14 +132,17 @@ var gridster;
 				var nowTme = Math.round(new Date().getTime()/1000);
 				// 检测节目播放是否过期
 				if(nowTme < programs['time_start'] || nowTme > programs['time_end']) {
-					var width = $('body').width();
-					$('body').css({
-						'background-color': '#2b9646'
-					}).append('<div style="width:'+width+'px;position:absolute;color:#FFF;font-size:36px;left:0;top:400px;">当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！</div>');
+                    opts.loadTemp();
+                    opts.warn();
+                    return false;
 				}
                 opts.switchScenes();
                 if($.isEmptyObject(opts.curPlayScenes)) {
-                   Utils.warn('当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！');
+                    opts.loadTemp();
+                    opts.warn();
+                   if(opts.monitor) {
+                       clearInterval(opts.monitor);
+                   }
                    return false;
                 }
             },
@@ -131,8 +164,9 @@ var gridster;
                 $.each(scenes, function(key, item) {
                     var startTime = item.time_start;
                     var endTime = item.time_end;
-                    opts._debug("当前时间="+nowTme+";开始时间="+startTime+";结束时间："+endTime);
+                    opts._debug("当前时间="+new Date().format()+";开始时间="+new Date(startTime*1000).format()+";结束时间："+new Date(endTime*1000).format());
                     if(startTime <= nowTme && nowTme <= endTime) {
+                        opts._debug("当前播放场景时间---当前时间="+new Date().format()+";开始时间="+new Date(startTime*1000).format()+";结束时间："+new Date(endTime*1000).format());
                         /*如果不是当前播放的场景则切换播放场景*/
                         if(item.id != opts.curPlaySid || opts.curPlaySid < 0) {
                             opts._before_changeScenes();
@@ -193,8 +227,7 @@ var gridster;
                         }
                         /*查询播放列表*/
                         if($.isEmptyObject(curPlayTask)){
-                            Utils.warn("当前广告位没有播放的任务", {consoleId: $("#widget_"+item.id)});
-                            opts._debug("widget_"+item.id+"当前没有播放的任务！");
+                            opts._debug("widget_"+item.id+"当前没有播放的任务或不用切换新的播放任务！");
                         }  else {
                             var playList = null;
                             var playListPrimKey = curPlayTask['play_list'];
@@ -234,9 +267,9 @@ var gridster;
                          opts.switchText($widgetId, widgetDivId, width, height, plays);
                          break;
                      case "time" :
-                         widgetHtml += '<div class="time" id="'+widgetDivId+'" style="width:'+width+'px; height:'+(height-20)+'px; "></div>';
+                         widgetHtml += '<div  id="'+widgetDivId+'" style="width:'+width+'px; height:'+height+'px; "></div>';
                          $widgetId.empty().append(widgetHtml);
-                         $.nowTime($("#"+widgetDivId));
+                         $('#'+widgetDivId).times({'css':'time_2',width: width, height: height});
                          break;
                      case "weather" :
                          widgetHtml += '<div id="'+widgetDivId+'" style="width:'+width+'px; height:'+height+'px;"></div>';
@@ -381,7 +414,8 @@ var gridster;
             opts.init();
             opts._debug(getInfo());
             /*执行监听*/
-            window.setInterval(opts.handlerData,opts.rateTime);
+            opts.monitor = window.setInterval(opts.handlerData,opts.rateTime);
+            opts.monitor;
         })
     }
 })(jQuery);

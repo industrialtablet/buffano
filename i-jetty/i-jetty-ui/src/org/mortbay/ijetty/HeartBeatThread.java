@@ -101,6 +101,7 @@ public class HeartBeatThread
                         IJetty.getInstance().mWebView.clearCache(true);
                         IJetty.getInstance().mWebView.reload();
                     }
+                    
                     //TODO:检查是否安装了软件管理工具，如果没有安装到指定地址下载安装
                     if(!ApkUtils.isBackgroundRunning(IJetty.getInstance(), "com.smallstar.androidlibapp"))
                     {
@@ -156,7 +157,6 @@ public class HeartBeatThread
                         IJetty.getInstance().startService(intent);
                     }
                     
-                    //InterfaceOp.protoHeartbeat(MachineStatus.MACHINE_STATUS_OFFLINE,MachineStatus.KUAISHUA_ACTIVATION_STATE,
                     InterfaceOp.protoHeartbeat(new IRequestListener()
                     {
                         public void onError(Exception e)
@@ -166,7 +166,7 @@ public class HeartBeatThread
 
                         public void onComplete(boolean isError, String errMsg, JSONObject respObj)
                         {
-                            //Log.e(LOGCAT, "heartbeat onComplete=>isError: " + isError + "  respObj:" + respObj);
+                            Log.e(LOGCAT, "heartbeat onComplete=>isError: " + isError + "  respObj:" + respObj);
                             if (isError || (respObj == null))
                             {
                                 return;
@@ -266,13 +266,14 @@ public class HeartBeatThread
                                         if(tsStart < tsNow && tsNow < tsEnd)
                                         {
                                             playUrl = oj.getString("url");
+                                            //Log.v(LOGCAT,playUrl);
                                             break;
                                         }
                                     }
-//                                    Log.e(LOGCAT, "********************************************");
-//                                    Log.e(LOGCAT, "playUrl:" + playUrl);
-//                                    Log.e(LOGCAT, "");Log.e(LOGCAT, "AppConstants.CLIENT_CUR_PLAYURL:" + AppConstants.CLIENT_CUR_PLAYURL);
-//                                    Log.e(LOGCAT, "********************************************");
+                                    Log.e(LOGCAT, "********************************************");
+                                    Log.e(LOGCAT, "playUrl:" + playUrl);
+                                    Log.e(LOGCAT, "");Log.e(LOGCAT, "AppConstants.CLIENT_CUR_PLAYURL:" + AppConstants.CLIENT_CUR_PLAYURL);
+                                    Log.e(LOGCAT, "********************************************");
                                     if(!playUrl.isEmpty() && !playUrl.equals(AppConstants.CLIENT_CUR_PLAYURL))
                                     {
                                         IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -280,6 +281,8 @@ public class HeartBeatThread
                                         IJetty.getInstance().mWebView.clearHistory();
                                         IJetty.getInstance().mWebView.clearFormData();
                                         IJetty.getInstance().mWebView.clearCache(true);
+                                        
+                                        //IJetty.getInstance().mWebView.setIntegerProperty("loadUrlTimeoutValue", 60000);
                                         IJetty.getInstance().mWebView.loadUrl(playUrl);
                                         AppConstants.CLIENT_CUR_PLAYURL = playUrl;
                                     }

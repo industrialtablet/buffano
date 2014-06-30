@@ -73,8 +73,8 @@
           <extensions>true</extensions>
           <configuration>
               <sdk>
-		  <path>/home/smallstar/android-sdks/</path>
-                  <platform>8</platform>
+		  <path>C:\adt-bundle-windows-x86_64-20131030\sdk</path>
+                  <platform>18</platform>
               </sdk>
               <deleteConflictingFiles>true</deleteConflictingFiles>
               <extractDuplicates>true</extractDuplicates> 

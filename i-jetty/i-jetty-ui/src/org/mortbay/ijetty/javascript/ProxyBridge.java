@@ -373,6 +373,7 @@ public class ProxyBridge
             MyFloatView.mAutoPlayList = false;
         }
         MyFloatView.startPlay();
+        Log.w(LOGCAT,"movieViewStarPlay() for ChenHua Test.......5");
     }
 
     /*
@@ -452,7 +453,6 @@ public class ProxyBridge
     /*
     @JavascriptInterface
     public void timeZoneSet() {
-    	//mWebView.loadUrl("http://www.baidu.com");
         //Toast.makeText(getApplicationContext(),"xdtianyu",Toast.LENGTH_LONG).show();
     	Log.v("smallstar", "ethSet()");
     	Runnable runnable = new Runnable() {

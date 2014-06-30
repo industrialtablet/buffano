@@ -57,20 +57,20 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 {
 	private static List<File> mMediaFiles = null;
 	private static int mCurIndex = 0;
-	
+
 	private float mTouchStartX;
 	private float mTouchStartY;
-	
+
 	public static float x = 0;
 	public static float y = 0;
 	public static float width = 800;
 	public static float height = 600;
-	
+
 	public static boolean mAutoPlayList = false;
 	public static boolean mPlayViewPrepareStatus = false;
 	public static boolean mPlayViewStatus = false;
 	public static String playListJsonString = "";
-	
+
 	static ViewGroup mlayoutView;
 	static Context context;
 	Display currentDisplay;
@@ -100,7 +100,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 				onTouchEvent(paramMotionEvent);
 				return false;
 			}
-			
+
 		});
 		initWindow();
 	}
@@ -112,7 +112,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 
 	public void onResume()
 	{
-	    
+
 	}
 
 	public void initWindow()
@@ -142,7 +142,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		currentDisplay = wm.getDefaultDisplay();
 //		WIDTH = currentDisplay.getWidth();
 //		HEIGHT = currentDisplay.getHeight();
-		
+
 		//以下参数调整视频窗口的位置
 		wmParams.x = (int)x;
 		wmParams.y = (int)y;
@@ -211,14 +211,14 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 
 	private PlayLocation loc = null;
 	private static File curFile = null;
-	
+
 	public static void startPlay()
 	{
 	    mPlayViewStatus = true;
 	    if (mediaPlayer.isPlaying()) return;
                mediaPlayer.start();
 	}
-	
+
 	public boolean prepare() {
 		//Log.e(LOGCAT, "prepare() video prepare 1");
 //		if (mMediaFiles != null && mMediaFiles.size() < 1) {
@@ -251,13 +251,13 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 			//Speak.setOn();
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.reset();
-			
+
 			mediaPlayer.setOnCompletionListener(this);
 			mediaPlayer.setOnErrorListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnSeekCompleteListener(this);
 			mediaPlayer.setOnVideoSizeChangedListener(this);
-			
+
 			mediaPlayer.setOnInfoListener(new OnInfoListener() {
 				@Override
 				public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -268,7 +268,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);// .STREAM_MUSIC);
 			mediaPlayer.setDisplay(surfaceHolder);
 			mediaPlayer.setScreenOnWhilePlaying(true);
-			
+
 			try
 			{
 				Log.v(LOGCAT, curFile.getAbsolutePath());
@@ -287,7 +287,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 				Log.v(LOGCAT, e.getMessage());
 				onExit();
 			}
-			
+
 			mediaPlayer.prepareAsync();
 			// mMediaPlayer.seekTo(pos);
 			return true;
@@ -302,7 +302,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		return false;
 	}
 
-	
+
 	public void play() {
 		if (mediaPlayer.isPlaying())
 			return;
@@ -322,7 +322,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 //		}
 	}
 
-	
+
 	static BroadcastReceiver sReceiver = new BroadcastReceiver()
 	{
 		@Override
@@ -433,7 +433,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	    }
 	    Log.e("gary", "listSupportedMediaFiles: " + mMediaFiles);
 	}
-	
+
 	private static void listSupportedMediaFiles() {
 		File mediaFile = new File(AppConstants.getMediaSdFolder());
 		mCurIndex = 0;
@@ -466,8 +466,8 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		mMediaFiles = Arrays.asList(files);
 		Log.e("gary", "listSupportedMediaFiles: " + mMediaFiles);
 	}
-	
-	
+
+
 	@Override
 	public void onPrepared(MediaPlayer mp)
 	{
@@ -505,7 +505,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 //				}
 //			}
 //		}
-		
+
 		//videoWidth = 800;
 		//videoHeight = 600;
 
@@ -549,7 +549,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		return false;
 	}
 
-	
+
 	@Override
 	public boolean onError(MediaPlayer arg0, int arg1, int arg2)
 	{
@@ -580,7 +580,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		//onExit(); //播放完后是否关闭视频播放窗口。
 	}
 
-	
+
 	private void prepareNext(){
 		if (mCurIndex < 0) {
 			//listSupportedMediaFiles();
@@ -594,7 +594,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 		}
 		prepare();
 	}
-	
+
 	public void showLayoutView()
 	{
 		wm.addView(mlayoutView, wmParams);
@@ -604,7 +604,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	{
 	    mPlayViewPrepareStatus = true;
 	}
-	
+
 	public static int WIDTH = 1024, HEIGHT = 552;
 	public static final int left = -VIEW_WIDTH / 2, top = 0, right = WIDTH
 			- VIEW_WIDTH / 2, bottom = HEIGHT - VIEW_HEIGHT / 2;
@@ -699,7 +699,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	    wmParams.height = wmParams.height - 20;
 	    wm.updateViewLayout(mlayoutView, wmParams);
 	}
-	
+
         public static void updateViewPosition()
         {
                 // 更新浮动窗口位置参数
@@ -717,7 +717,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	    //wmParams.y = (int) (y - mTouchStartY);
 	    wm.updateViewLayout(mlayoutView, wmParams);
 	}
-	
+
 	public static void rightMoveView()
 	{
 	    Log.v("smallstar", "================right===================");
@@ -725,7 +725,7 @@ public class MyFloatView implements OnCompletionListener, OnErrorListener,
 	       //wmParams.y = (int) (y - mTouchStartY);
 	       wm.updateViewLayout(mlayoutView, wmParams);
 	}
-	
+
 	@Override
 	public void onClick(View v)
 	{
