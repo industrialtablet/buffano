@@ -972,47 +972,47 @@ public String getDisplayScreenSize()
         mWebView.stopLoading();
     }
     
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event)
-    {
-
-        //获得触摸的坐标  
-        float x = event.getX();
-        float y = event.getY();
-        switch (event.getAction())
-        {
-            //触摸屏幕时刻  
-            case MotionEvent.ACTION_DOWN:
-//                Log.w(TAG, "MotionEvent.ACTION_DOWN");
-//                Toast.makeText(IJetty.getInstance().getApplicationContext(), "MotionEvent.ACTION_DOWN",
-//                Toast.LENGTH_SHORT).show();
-                if (MyFloatView.mPlayViewPrepareStatus)
-                {
-                    Log.e("smallstar", "MyFloatView.mPlayViewPrepareStatus is true!");
-                    MyFloatView.mPlayViewStatus = false;
-                    MyFloatView.onExit();
-                }
-                if(!ApkUtils.isBackgroundRunning(IJetty.getInstance(), "com.suncco.weather"))
-                {
-                    Log.e("smallstar", "com.suncco.weather is not running.");
-                    ApkUtils.startAppByPackageName("com.suncco.weather");
-                }
-                else
-                {
-                    Log.e("smallstar", "com.suncco.weather is running.");
-                    ApkUtils.startAppByPackageName("com.suncco.weather");
-                }
-                break;
-            //触摸并移动时刻  
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-            //终止触摸时刻  
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return true;
-    }    
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event)
+//    {
+//
+//        //获得触摸的坐标  
+//        float x = event.getX();
+//        float y = event.getY();
+//        switch (event.getAction())
+//        {
+//            //触摸屏幕时刻  
+//            case MotionEvent.ACTION_DOWN:
+////                Log.w(TAG, "MotionEvent.ACTION_DOWN");
+////                Toast.makeText(IJetty.getInstance().getApplicationContext(), "MotionEvent.ACTION_DOWN",
+////                Toast.LENGTH_SHORT).show();
+//                if (MyFloatView.mPlayViewPrepareStatus)
+//                {
+//                    Log.e("smallstar", "MyFloatView.mPlayViewPrepareStatus is true!");
+//                    MyFloatView.mPlayViewStatus = false;
+//                    MyFloatView.onExit();
+//                }
+//                if(!ApkUtils.isBackgroundRunning(IJetty.getInstance(), "com.suncco.weather"))
+//                {
+//                    Log.e("smallstar", "com.suncco.weather is not running.");
+//                    ApkUtils.startAppByPackageName("com.suncco.weather");
+//                }
+//                else
+//                {
+//                    Log.e("smallstar", "com.suncco.weather is running.");
+//                    ApkUtils.startAppByPackageName("com.suncco.weather");
+//                }
+//                break;
+//            //触摸并移动时刻  
+//            case MotionEvent.ACTION_MOVE:
+//
+//                break;
+//            //终止触摸时刻  
+//            case MotionEvent.ACTION_UP:
+//                break;
+//        }
+//        return true;
+//    }    
     
     @Override  
     public boolean dispatchKeyEvent(KeyEvent event) {  

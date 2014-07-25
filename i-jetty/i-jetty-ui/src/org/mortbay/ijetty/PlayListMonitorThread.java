@@ -65,10 +65,6 @@ public class PlayListMonitorThread {
 		try {
 			while (!doneFlag && (thread == thisThread)) {
 				try {
-					if(PlayListUtil.isPlayListChanged)
-					{						
-					    PlayListUtil.getPlayList();
-					}
 					if(!PlayListUtil.isPlayListFileSynced)
 					{
 					    //执行播放清单同步操作，主要为下载文件列表。

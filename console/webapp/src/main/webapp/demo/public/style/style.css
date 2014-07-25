@@ -53,3 +53,5 @@ img{border:none}
 .alert-info .alert-link {
     color: #245269;
 }
+
+.marquee-with-options{position:absolute;color:#000;font-size:20px;overflow: hidden;}

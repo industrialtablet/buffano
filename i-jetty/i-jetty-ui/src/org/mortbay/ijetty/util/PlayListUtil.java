@@ -1,23 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////example//////////////////////////////////////////////////////
-//		String res = "";
-//		try
-//		{
-//			 InputStream fin = this.getBaseContext().getAssets().open("example.txt");;
-//			 int length = fin.available();
-//			 byte [] buffer = new byte[length];
-//			 fin.read(buffer);
-//			 res = EncodingUtils.getString(buffer, "UTF-8");
-//			 fin.close(); 
-//		}catch(Exception e)
-//		{
-//			e.printStackTrace();
-//		} 
-//		PlayListUtil.readPlayList(res);
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
 package org.mortbay.ijetty.util;
 
 import java.io.File;
@@ -69,7 +49,7 @@ public class PlayListUtil
     private static List<String> mListPlayDefineList = new ArrayList<String>();
     private static List<PlayTime> mListPlayTimes = new ArrayList<PlayTime>();
 
-    public static void getPlayList()
+    public static void getJsonPlayList()
     {
         InterfaceOp.protoPlayListGet(new IRequestListener()
         {
@@ -80,26 +60,49 @@ public class PlayListUtil
 
             public void onComplete(boolean isError, String errMsg, JSONObject respObj)
             {
-                //                        LogUtil.log("getPlayList onComplete =====>isError: "
-                //                                        + isError + "  respObj:" + respObj);
                 if (respObj.optString("result","") == "false")
                 {
-                    Log.e("====smallstar=====",respObj.optString("error",""));
+                    Log.e(TAG,respObj.optString("error",""));
                     return;
                 }
-                //========================playlist==========================
                 if (respObj.optString("playlists","") == "")
                 {
                     mStrNewPlayList = "var programs = " + "{}" + ";";
                 }
                 else
                 {
-                    mStrNewPlayList = "var programs = " + respObj.optString("playlists","") + ";";
+                    try
+                    {
+                        String playListMode="";
+                        JSONObject oj = new JSONObject(respObj.optString("playlists",""));
+                        playListMode = oj.getString("mode");
+                        if(playListMode.endsWith("code"))
+                        {
+//                            Log.i(TAG, "***************************************");
+//                            Log.i(TAG, oj.getString("code"));
+//                            Log.i(TAG, "***************************************");
+                            convertPlayList(oj.getString("code"));
+                        }
+                        else
+                        {
+                            mStrNewPlayList = "var programs = " + respObj.optString("playlists","") + ";";
+                        }
+                    }
+                    catch (JSONException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
                 mStrPlayList = mStrNewPlayList;
                 writeFile(IJetty.__JETTY_DIR + "/" + IJetty.__WEBAPP_DIR + "/console/demo/data/programs.js",mStrNewPlayList);
                 //========================filelist==========================
                 mStrFileList = respObj.optString("files","");
+                if(mStrFileList.isEmpty())
+                {
+                    Log.e(TAG, "mStrFileList is empty");
+                    return;
+                }
                 Log.w("smallstar", mStrFileList);
                 try
                 {
@@ -122,7 +125,7 @@ public class PlayListUtil
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                isPlayListChanged = false;
+                //isPlayListChanged = false;
                 isPlayListFileSynced = false;
                 AppConstants.URLPLAYLIST = "";
                 //IJetty.getInstance().clearFormData();
@@ -148,7 +151,7 @@ public class PlayListUtil
         String folder;
     }
 
-    //确认APK下载完
+    //确认
     public static void confirmGetPlayListFiles()
     {
         InterfaceOp.protoPlayListConfirm(new IRequestListener()
@@ -162,7 +165,7 @@ public class PlayListUtil
             {
                 if (respObj.optString("result","").equals("false"))
                 {
-                    Log.e("====smallstar=====",respObj.optString("error",""));
+                    Log.e(TAG,respObj.optString("error",""));
                     return;
                 }
             }
@@ -266,10 +269,13 @@ public class PlayListUtil
         return filesAllEqure;
     }
 
-    public static boolean readPlayList(String playList)
+    
+    /*
+     * For Brandon Project
+     * */
+    public static boolean convertPlayList(String playList)
     {
         mStrPlayList = playList;
-        Log.w(TAG,mStrPlayList);
         if (!initDomain(mStrPlayList))
         {
             return false;
@@ -277,6 +283,131 @@ public class PlayListUtil
         initPlayZones(mStrZoneDefine);
         initSetDefine(mListSetDefine);
         initTimeDefine(mListPlayDefineList);
+        mStrNewPlayList = "var programs = " + "{" +
+                "\"name\": \"测试节目1\"," +
+                "\"screen\": \"1280*720\"," +
+                "\"time_start\": 1356969600," +
+                "\"time_end\": 1420041600," +
+                "\"scenes\": [{" +
+                "\"id\": 0," +
+                "\"mode\": \"\","+
+                "\"name\": \"测试节目1\"," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"widget\": [{" +
+                "\"id\": 62," +
+                "\"col\": 6," +
+                "\"row\": 2," +
+                "\"size_x\": 1," +
+                "\"size_y\": 4," +
+                "\"type\": \"weather\"" +
+                "}, {" +
+                "\"id\": 73," +
+                "\"col\": 6," +
+                "\"row\": 1," + 
+                "\"size_x\": 1," +
+                "\"size_y\": 1," +
+                "\"type\": \"time\"" +
+                "}, {" +
+                "\"id\": 74," +
+                "\"col\": 6," +
+                "\"row\": 6," +
+                "\"size_x\": 1," +
+                "\"size_y\": 1," +
+                "\"type\": \"image\"" +
+                "}, {" +
+                "\"id\": 127," +
+                "\"col\": 1," +
+                "\"row\": 2," +
+                "\"size_x\": 5," +
+                "\"size_y\": 5," +
+                "\"type\": \"video\"" +
+                "}, {" +
+                "\"id\": 147," +
+                "\"col\": 1," +
+                "\"row\": 1," +
+                "\"size_x\": 5," +
+                "\"size_y\": 1," +
+                "\"type\": \"text\"" +
+                "}]," +
+                "\"play_task\": {" +
+                "\"widget_127\": [{" +
+                "\"taskId\": 70," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"play_list\": \"play_70\"" +
+                "}]," +
+                "\"widget_147\": [{" +
+                "\"taskId\": 84," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"play_list\": \"play_84\"" +
+                "}]," +
+                "\"widget_62\": [{" +
+                "\"taskId\": 33," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"play_list\": \"play_33\"" +
+                "}]," +
+                "\"widget_73\": [{" +
+                "\"taskId\": 44," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"play_list\": \"play_44\"" +
+                "}]," +
+                "\"widget_74\": [{" +
+                "\"taskId\": 40," +
+                "\"time_start\": 1356969600," +
+                "\"t_start\": \"\"," +
+                "\"time_end\": 1420041600," +
+                "\"t_end\": \"\"," +
+                "\"play_list\": \"play_40\"" +
+                "}]" +
+                "}," +
+                "\"play_list\": {" +
+                "\"play_33\": {" +
+                "\"lists\": null" +
+                "}," +
+                "\"play_40\": {" +
+                "\"lists\": [{" +
+                "\"text\": \"\"," +
+                "\"url\": \"upload/201404/1397745729.jpg\"" +
+                "}]" +
+                "}," +
+                "\"play_44\": {" +
+                "\"lists\": null" +
+                "}," +
+                "\"play_70\": {" +
+                "\"lists\": [{" +
+                "\"text\": \"\"," +
+                "\"url\": \"upload/201405/1399519563.avi\"" +
+                "}, {" +
+                "\"text\": \"\"," +
+                "\"url\": \"upload/201404/1398323444.mp4\"" +
+                "}]" +
+                "}," +
+                "\"play_84\": {" +
+                "\"lists\": [{" +
+                "\"text\": \"新华网内比都5月19日电 赴缅甸出席中国－东盟国防部长会晤的国务委员兼国防部长常万全19日下午在内比都会见了越南国防部长冯光青。\"," +
+                "\"url\": \"\"" +
+                "}, {" +
+                "\"text\": \"国家主席习近平20日上午在上海与应邀来华进行国事访问并出席亚信上海峰会的俄罗斯总统普京举行会谈。会谈前，习近平为普京举行欢迎仪式。\"," +
+                "\"url\": \"\"" +
+                "}]" +
+                "}" +
+                "}" +
+                "}]" +
+                "}" + ";";
         return true;
     }
 
@@ -291,7 +422,7 @@ public class PlayListUtil
     {
         //START_ZONES开头
         playList = StringUtils.replaceBlank(playList);
-        if (!playList.startsWith("START_ZONES"))
+        if (!playList.startsWith("DEFINE_ZONES"))
         {
             Log.e(TAG,"playList String not start with START_ZONES");
             return false;
@@ -311,7 +442,7 @@ public class PlayListUtil
 
         if (!playList.startsWith("DEFINE_SET"))
         {
-            Log.e(TAG,"playList Second String not start with START_ZONES");
+            Log.e(TAG,"playList Second String not start with DEFINE_SET");
             return false;
         }
         Index = playList.lastIndexOf("END_SET");
@@ -333,11 +464,10 @@ public class PlayListUtil
                 mListSetDefine.add(subTempStr);
             }
         }
-
         playList = playList.substring(Index + "END_SET".length(),playList.length());
         if (!playList.startsWith("PLAY"))
         {
-            Log.e(TAG,"playList Second String not start with START_ZONES");
+            Log.e(TAG,"playList Second String not start with PLAY");
             return false;
         }
         else
@@ -359,43 +489,64 @@ public class PlayListUtil
     private static void initPlayZones(String zoneDefine)
     {
         int index;
+        Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Log.i(TAG, zoneDefine);
+        Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         //去掉START_ZONES与END_ZONES
-        if (!zoneDefine.startsWith("START_ZONES"))
+        if (!zoneDefine.startsWith("DEFINE_ZONES"))
         {
             Log.e(TAG,"zoneDefine String not start with START_ZONES");
             return;
         }
-        String temp = zoneDefine.substring("START_ZONES".length());
+        String temp = zoneDefine.substring("DEFINE_ZONES".length());
         index = temp.indexOf("END_ZONES");
         temp = temp.substring(0,index);
-        String zoneName, PointValues;
-        int pointValues[] = new int[4];
-        for (index = temp.indexOf("="); index > 0; index = temp.indexOf("="))
+        Log.i(TAG, temp);
+        Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        for (index = temp.indexOf(";"); index > 0; index = temp.indexOf(";"))
         {
+            String zoneSubString;
+            int pointValues[] = new int[4];
             PlayZone playZone = new PlayZone();
-            zoneName = temp.substring(0,index);
-            PointValues = temp.substring(index + 1,temp.indexOf(")") + 1);
-            temp = temp.substring(temp.indexOf(")") + 1,temp.length());
-            playZone.zoneName = zoneName;
-            PointValues = PointValues.substring(1);//remove (
-            PointValues = PointValues.substring(0,PointValues.length() - 1);//remove)
-            for (int i = PointValues.indexOf(','), j = 0; i > 0; i = PointValues.indexOf(','))
+            zoneSubString = temp.substring(1, index-1);  //去掉()
+            temp = temp.substring(index+1);
+            Log.i(TAG, zoneSubString);
+            Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            for(int i=zoneSubString.indexOf(','), j=-1; i>0; i=zoneSubString.indexOf(','))
             {
-                String value = PointValues.substring(0,i);
-                PointValues = PointValues.substring(i + 1);
-                pointValues[j] = Integer.parseInt(value);
-                //Log.w(TAG, String.valueOf(pointValues[j]));
-                j++;
-                if (j == 3)
+                if(j<0)
                 {
-                    pointValues[j] = Integer.parseInt(PointValues);
+                    playZone.zoneName = zoneSubString.substring(0,i);
+                    zoneSubString = zoneSubString.substring(i+1);
                 }
+                else
+                {
+                    pointValues[j] = Integer.parseInt(zoneSubString.substring(0,i));
+                    zoneSubString = zoneSubString.substring(i+1);
+                    if(j==2)
+                    {pointValues[j+1] = Integer.parseInt(zoneSubString);}
+                }
+                Log.i(TAG+"-j", String.valueOf(j));
+                Log.i(TAG+"-zoneSubString", zoneSubString);
+                j++;
             }
             playZone.zoneValue = pointValues;
             mListPlayZone.add(playZone);
         }
+        Log.i(TAG, "=======================================");
+        for(int i=0; i<mListPlayZone.size(); i++)
+        {
+            Log.i(TAG, mListPlayZone.get(i).zoneName);
+            for(int j=0; j<4; j++)
+            {
+                Log.i(TAG, String.valueOf(mListPlayZone.get(i).zoneValue[j]));
+            }
+        }
+        Log.i(TAG, "========================================");
     }
 
+    
+    
     private static void initSetDefine(List<String> setList)
     {
         String setTemp;
@@ -406,21 +557,21 @@ public class PlayListUtil
             setTemp = setTemp.substring("DEFINE_SET".length(),setTemp.indexOf("END_SET"));
             PlaySet playSet = new PlaySet();
             playSet.setName = setTemp.substring("(".length(),setTemp.indexOf(")"));
-            Log.w(TAG,playSet.setName);
+            //Log.i(TAG,playSet.setName);
             setTemp = setTemp.substring(setTemp.indexOf(")") + 1);
             String strPlaySetUnit;
-            String strKeys[] = new String[5];
+            String strKeys[] = new String[7];
             for (int j = setTemp.indexOf(';'); j > 0; j = setTemp.indexOf(';'))
             {
                 strPlaySetUnit = setTemp.substring(0,j);
                 setTemp = setTemp.substring(j + 1);
-                //				Log.w(TAG, strPlaySetUnit);
+                //Log.i(TAG, strPlaySetUnit);
                 for (int k = strPlaySetUnit.indexOf(','), l = 0; k > 0; k = strPlaySetUnit.indexOf(','))
                 {
                     strKeys[l] = strPlaySetUnit.substring(0,k);
                     strPlaySetUnit = strPlaySetUnit.substring(k + 1);
                     l++;
-                    if (l == 4)
+                    if (l == 6)
                     {
                         strKeys[l] = strPlaySetUnit;
                     }
@@ -431,6 +582,8 @@ public class PlayListUtil
                 playSetUnit.playMode = strKeys[2];
                 playSetUnit.playDuration = strKeys[3];
                 playSetUnit.playTransition = strKeys[4];
+                playSetUnit.startTime = strKeys[5];
+                playSetUnit.endTime = strKeys[6];
                 //				Log.w(TAG, "+++++++++++++++++++++++++++++++++++++++++++++++++++");
                 //				Log.w(TAG, playSetUnit.fileName + playSetUnit.playRegions + playSetUnit.playMode + 
                 //						playSetUnit.playDuration + playSetUnit.playTransition);
@@ -449,34 +602,33 @@ public class PlayListUtil
             PlayTime playTime = new PlayTime();
             timeTemp = timeList.get(i);
             timeTemp = timeTemp.substring(timeTemp.indexOf("(") + 1,timeTemp.indexOf(")"));
-            //Log.w(TAG, timeTemp);
-            String subTimeTemp1, subTimeTemp2;
-            subTimeTemp1 = timeTemp.substring(0,timeTemp.indexOf('/') - 3);
-            subTimeTemp2 = timeTemp.substring(timeTemp.indexOf('/') - 2);
-            //Log.w(TAG, subTimeTemp1);
-            playTime.playContent = subTimeTemp1.substring(0,subTimeTemp1.indexOf(','));
-            playTime.days = subTimeTemp1.substring(subTimeTemp1.indexOf('=') + 1);
-            //Log.w(TAG, subTimeTemp2);
-            String strKeys[] = new String[5];
-            for (int j = subTimeTemp2.indexOf(','), k = 0; j > 0; j = subTimeTemp2.indexOf(','))
+            Log.i(TAG, timeTemp);
+
+            String strKeys[] = new String[7];
+            for (int j = timeTemp.indexOf(','), k = 0; k<6; j = timeTemp.indexOf(','))
             {
-                strKeys[k] = subTimeTemp2.substring(0,j);
-                subTimeTemp2 = subTimeTemp2.substring(j + 1);
+                Log.i(TAG + "-j", String.valueOf(j));
+                strKeys[k] = timeTemp.substring(0,j);
+                timeTemp = timeTemp.substring(j + 1);
                 k++;
-                if (k == 4)
+                strKeys[k] = timeTemp;
+                if (k == 5)
                 {
-                    strKeys[k] = subTimeTemp2;
+                    strKeys[k+1] = timeTemp;
                 }
             }
-            playTime.startDate = strKeys[0];
-            playTime.endDate = strKeys[1];
-            playTime.startTime = strKeys[2];
-            playTime.endTime = strKeys[3];
-            playTime.endMode = strKeys[4];
-            //			Log.w(TAG, "+++++++++++++++++++++++++++++++++++++++++++++++++++");
-            //			Log.w(TAG, playTime.playContent + playTime.days + playTime.startDate + playTime.endDate + playTime.startTime+
-            //					playTime.endTime + playTime.endMode);
-            //			Log.w(TAG, "+++++++++++++++++++++++++++++++++++++++++++++++++++");
+            
+            playTime.playContent = strKeys[0];
+            playTime.endMode = strKeys[1];
+            playTime.startDate = strKeys[2];
+            playTime.endDate = strKeys[3];
+            playTime.startTime = strKeys[4];
+            playTime.endTime = strKeys[5];
+            playTime.days = strKeys[6];
+            			Log.w(TAG, "+++++++++++++++++++++++++++++++++++++++++++++++++++");
+            			Log.w(TAG, playTime.playContent + playTime.days + playTime.startDate + playTime.endDate + playTime.startTime+
+            					playTime.endTime + playTime.endMode);
+            			Log.w(TAG, "+++++++++++++++++++++++++++++++++++++++++++++++++++");
             mListPlayTimes.add(playTime);
         }
     }
@@ -506,17 +658,19 @@ public class PlayListUtil
         //R = transition is RANDOM
         //T = transition is TWIST
         String playTransition;
+        String startTime;
+        String endTime;
     }
 
     public static class PlayTime
     {
         String playContent;
-        String days;
+        String endMode;
         String startDate;
         String endDate;
         String startTime;
         String endTime;
-        String endMode;
+        String days;
     }
 
     public static String playZones2Json()

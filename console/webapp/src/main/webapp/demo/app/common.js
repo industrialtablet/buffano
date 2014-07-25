@@ -1,3 +1,81 @@
+/*基础JS*/
+var Tool = (function($) {
+    return {
+        /*启动*/
+        'Browser': function(argv) {
+            /*判断浏览器类型*/
+            var browserSys = {};
+            var browserType;
+            var browserUa = navigator.userAgent.toLowerCase();
+            var s;
+            (s = browserUa.match(/msie ([\d.]+)/)) ? browserSys.ie = s[1] :
+                (s = browserUa.match(/firefox\/([\d.]+)/)) ? browserSys.firefox = s[1] :
+                    (s = browserUa.match(/chrome\/([\d.]+)/)) ? browserSys.chrome = s[1] :
+                        (s = browserUa.match(/opera.([\d.]+)/)) ? browserSys.opera = s[1] :
+                            (s = browserUa.match(/version\/([\d.]+).*safari/)) ? browserSys.safari = s[1] : 0;
+
+            if (browserSys.ie) {
+                browserType = 'IE';
+                browserTypeSys = browserSys.ie;
+            }
+            if (browserSys.firefox) {
+                browserType = 'Firefox';
+                browserTypeSys = browserSys.firefox;
+            }
+            if (browserSys.chrome) {
+                browserType = 'Chrome';
+                browserTypeSys = browserSys.chrome;
+            }
+            if (browserSys.opera) {
+                browserType = 'Opera';
+                browserTypeSys = browserSys.opera;
+            }
+            if (browserSys.safari) {
+                browserType = 'Safari';
+                browserTypeSys = browserSys.safari;
+            }
+            var browser_type = browserType + browserTypeSys;
+            /*获取浏览器高度*/
+            var height = 0;
+            if(browserType == 'IE')	{
+                height = document.compatMode == "CSS1Compat" ? document.documentElement.clientHeight : document.body.clientHeight;
+            } else {
+                height = self.innerHeight;
+            }
+            /*获取浏览器宽度*/
+            var width = 0;
+            if(browserType == 'IE') {
+                width = document.compatMode == "CSS1Compat"? document.documentElement.clientWidth : 	document.body.clientWidth;
+            } else {
+                width = self.innerWidth;
+            }
+            switch(argv) {
+                case 'type':return browserType;break;
+                case 'ver':return browserTypeSys;break;
+                case 'height':return height;break;
+                case 'width':return width;break;
+                default:
+                    return {
+                        'type' : browserType,
+                        'ver' : browserTypeSys,
+                        'height' : height,
+                        'width' : width
+                    }
+                    break;
+            }
+        },
+
+        /*
+         * 判断值是否在数组中
+         * needle    值
+         * haystack  数组
+         */
+        'in_array': function(needle, haystack) {
+            if(typeof needle == 'string' || typeof needle == 'number') {for(var i in haystack) {if(haystack[i] == needle) {return true;}}}
+            return false;
+        }
+    };
+})(Tool);
 /**
  * 模块工具类，用来初始化各模块视图、自定绑定事件以及其他辅助功能等
  *
@@ -76,6 +154,17 @@ var Utils = {
         };
         // 返回内部包函数,供外部调用并可以更改temp的值
         return tempMethod;
+    },
+    play : function(url) {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.type = "audio/mpeg";
+        source.type = "audio/mpeg";
+        source.src = url;
+        source.autoplay = "autoplay";
+        source.controls = "false";
+        audio.appendChild(source);
+        audio.play();
     }
 };
 

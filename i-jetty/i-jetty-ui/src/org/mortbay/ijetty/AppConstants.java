@@ -13,14 +13,7 @@ import android.util.Log;
 public class AppConstants {
 	
         //客户端组织ID，用来区别客户，可理解为客户代码
-        public static String ORGANIZE_ID = "1";//For 试用
-        //public static String ORGANIZE_ID = "2";//For Brandon
-        //public static String ORGANIZE_ID = "3";//For Test(aaaa,111111)
-        //public static String ORGANIZE_ID = "4";//For  cshc:创视慧成科技有限公司
-        //public static String ORGANIZE_ID = "5";//For  qwerty_sz
-        //public static String ORGANIZE_ID = "6";//For  Barton
-        //public static String ORGANIZE_ID = "7";//For  Dojoo
-        //public static String ORGANIZE_ID = "7";//For  Barton
+        public static String ORGANIZE_ID = "2";//For 试用
         
 	/*
 	 * 新版广告机客户端UI相关
@@ -42,7 +35,6 @@ public class AppConstants {
 	public static final int TIMEOUT_FETCH_CONNECTION = 5 * 1000;
 	public static final int TIMEOUT_ESTABLISH_CONNECTION = 10 * 1000;
 	public static final int TIMEOUT_REQUEST = 20 * 1000;
-
 
 	/**
 	 * 六边形真实的长宽高

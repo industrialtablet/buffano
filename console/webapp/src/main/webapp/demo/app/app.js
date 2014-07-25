@@ -111,8 +111,21 @@ var gridster;
             warn : function() {
                 setTimeout(function() {
                     var width = $('body').width();
-                    $('body').append('<div class="alert alert-info" style="position:absolute;color:#000;font-size:20px;left:120px;top:400px;">' +
-                        '当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！</div>');
+                    $('body').append('<div class="alert alert-info marquee-with-options">当前时间不在节目单定义的时间范围，请在管理平台重新编辑节目并发布！</div>');
+                    $('.marquee-with-options').css({
+                        width: '300px',
+                        top : (Tool.Browser('height')/2 - 70) + 'px',
+                        left : (window.document.body.offsetWidth/2 - 150) + 'px'
+                    }).marquee({
+                        speed: 5000,
+                        gap: 50,
+                        delayBeforeStart: 0,
+                        direction: 'left',
+                        duplicated: true,
+                        pauseOnHover: true
+                    });
+                    /*播放背景音乐*/
+                    Utils.play('upload/temp/bg.mp3');
                 }, 800);
             },
 

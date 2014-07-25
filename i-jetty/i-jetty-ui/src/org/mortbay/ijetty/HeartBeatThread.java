@@ -81,6 +81,182 @@ public class HeartBeatThread
 
     public static final char SPLIT_CHAR = '|';
 
+    
+    private void updateGroupId(String group_id)
+    {
+        //String group_id = respObj.optString("group_id","");
+        if (!TextUtils.isEmpty(group_id))
+        {
+            group_id = group_id.trim();
+            //Log.w(TAG,"===>" + group_id);
+            if (!group_id.equals(AppConstants.GROUP_ID))
+            {
+                AppConstants.GROUP_ID = group_id;
+            }
+        } 
+        
+    }
+    /*
+     * 从服务器更新播放连接地址，先判断连接地址是否有效
+     * */
+    private void updatePlayLink(String playURL)
+    {
+        //String playURL = respObj.optString("link","");
+        if (!TextUtils.isEmpty(playURL))
+        {
+            playURL = playURL.trim();
+            Log.w(LOGCAT,"===>playURL:" + playURL);
+            Log.w(LOGCAT,"===>CLIENT_CUR_PLAYURL:" + AppConstants.CLIENT_CUR_PLAYURL);
+            if (!playURL.equals(AppConstants.CLIENT_CUR_PLAYURL))
+            {
+                AppConstants.CLIENT_CUR_PLAYURL = playURL;
+                //保存URL到配置文件
+                File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
+                mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
+                mPropertiesUtil.setPlayUrl(AppConstants.CLIENT_CUR_PLAYURL);
+                mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
+                IJetty.getInstance().mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_CUR_PLAYURL);
+            }
+        }
+    }
+    
+    /*
+     *从服务器更新播放清单，先判断是否有更新
+     * */
+    private void updatePlayList(String playListVersion)
+    {
+        if (!playListVersion.equals(PlayListUtil.playListVersion))
+        {
+            //Log.w(LOGCAT,"===>playListVersion:" + playListVersion);
+            //保存播单版本到配置文件
+            File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
+            mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
+            mPropertiesUtil.setPlayListVersion(playListVersion);//保存节目单推送版本记录
+            mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
+            PlayListUtil.playListVersion = playListVersion;
+            //PlayListUtil.isPlayListChanged = true;//转PlayList线程处理
+            PlayListUtil.getJsonPlayList();
+        }
+    }
+    
+    private void updateApks(String apkPushVersion)
+    {
+        //String apkPushVersion = respObj.optString("version_apk","");
+        if(!apkPushVersion.equals(ApkUtils.apkPushVersion))
+        {
+            File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
+            mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
+            mPropertiesUtil.setApkPushVersion(apkPushVersion);//保存APK推送版本记录
+            mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
+            ApkUtils.apkPushVersion = apkPushVersion;
+            ApkUtils.isApkChanged = true;//转apk线程处理
+        }
+    }
+    
+    private void updateRefresh(boolean refreshStatus)
+    {
+        //refresh
+        //boolean refreshStatus = respObj.optBoolean("refresh");//optString("refresh","");
+        //Log.w(LOGCAT,"refreshStatus:" + refreshStatus);
+        if(refreshStatus)
+        {
+            IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
+            IJetty.getInstance().mWebView.clearHistory();
+            IJetty.getInstance().mWebView.clearFormData();
+            IJetty.getInstance().mWebView.clearCache(true);
+            IJetty.getInstance().mWebView.reload();
+            //IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_CUR_PLAYURL);
+            InterfaceOp.protoRefreshConfirm(new IRequestListener()
+            {
+                public void onError(Exception e)
+                {
+                    LogUtil.log("protoRefreshConfirm onError: " + e.getMessage());
+                }
+
+                public void onComplete(boolean isError, String errMsg, JSONObject respObj)
+                {
+                    //Log.e("smallstar", "heartbeat onComplete=>isError: " + isError + "  respObj:" + respObj);
+                    if (isError || (respObj == null))
+                    {
+                        return;
+                    }
+                    String result = respObj.optString("result","");
+                    if (!result.equals("true"))
+                    {
+                        Log.w("protoRefreshConfirm return",result);
+                        return;
+                    }
+                }
+            });
+        }
+    }
+    
+    public void UpdateUrlPlaylist()
+    {
+        //urlplaylist处理
+        if(!AppConstants.URLPLAYLIST.isEmpty())
+        {
+            Log.e(LOGCAT, "AppConstants.URLPLAYLIST:=" + AppConstants.URLPLAYLIST);
+            JSONArray jsonar=null;
+            String playUrl = "";
+            try {
+                jsonar = new JSONArray(AppConstants.URLPLAYLIST);
+                for(int i=0; i<jsonar.length(); i++)
+                {
+                    JSONObject oj = jsonar.getJSONObject(i);
+                    Long tsStart = Long.parseLong(oj.getString("time_start"));
+                    Long tsEnd = Long.parseLong(oj.getString("time_end"));
+                    Long tsNow = System.currentTimeMillis()/1000;
+                    String ts = tsNow.toString();
+                    if(tsStart < tsNow && tsNow < tsEnd)
+                    {
+                        playUrl = oj.getString("url");
+                        //Log.v(LOGCAT,playUrl);
+                        break;
+                    }
+                }
+                if(!playUrl.isEmpty() && !playUrl.equals(AppConstants.CLIENT_CUR_PLAYURL))
+                {
+                    IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                    //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
+                    IJetty.getInstance().mWebView.clearHistory();
+                    IJetty.getInstance().mWebView.clearFormData();
+                    IJetty.getInstance().mWebView.clearCache(true);
+                    
+                    //IJetty.getInstance().mWebView.setIntegerProperty("loadUrlTimeoutValue", 60000);
+                    IJetty.getInstance().mWebView.loadUrl(playUrl);
+                    AppConstants.CLIENT_CUR_PLAYURL = playUrl;
+                }
+                if(playUrl.isEmpty() && !AppConstants.CLIENT_CUR_PLAYURL.equals(AppConstants.CLIENT_DEFAULT2_PLAYURL))
+                {
+                    IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                    //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
+                    IJetty.getInstance().mWebView.clearHistory();
+                    IJetty.getInstance().mWebView.clearFormData();
+                    IJetty.getInstance().mWebView.clearCache(true);
+                    IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_DEFAULT2_PLAYURL);
+                    AppConstants.CLIENT_CUR_PLAYURL = AppConstants.CLIENT_DEFAULT2_PLAYURL;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            if(!AppConstants.CLIENT_CUR_PLAYURL.equals(AppConstants.CLIENT_DEFAULT2_PLAYURL))
+            {
+                IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
+                IJetty.getInstance().mWebView.clearHistory();
+                IJetty.getInstance().mWebView.clearFormData();
+                IJetty.getInstance().mWebView.clearCache(true);
+                IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_DEFAULT2_PLAYURL);                                    
+                AppConstants.CLIENT_CUR_PLAYURL = AppConstants.CLIENT_DEFAULT2_PLAYURL;
+            }
+        }
+    }
     public void process(Thread thisThread)
     {
         threadStartFlag = true;
@@ -167,188 +343,15 @@ public class HeartBeatThread
                         public void onComplete(boolean isError, String errMsg, JSONObject respObj)
                         {
                             Log.e(LOGCAT, "heartbeat onComplete=>isError: " + isError + "  respObj:" + respObj);
-                            if (isError || (respObj == null))
-                            {
-                                return;
-                            }
+                            if (isError || (respObj == null)) return;
                             
-
-                            String organize_id = respObj.optString("organize_id","");
-                            if (!TextUtils.isEmpty(organize_id))
-                            {
-                                organize_id = organize_id.trim();
-                                //Log.w(TAG,"===>" + organize_id);
-                            }
-                            String group_id = respObj.optString("group_id","");
-                            if (!TextUtils.isEmpty(group_id))
-                            {
-                                group_id = group_id.trim();
-                                //Log.w(TAG,"===>" + group_id);
-                                if (!group_id.equals(AppConstants.GROUP_ID))
-                                {
-                                    AppConstants.GROUP_ID = group_id;
-                                }
-                            }
-                            
-                            String imei = respObj.optString("imei","");
-                            if (!TextUtils.isEmpty(imei))
-                            {
-                                imei = imei.trim();
-                                //Log.w(TAG,"===>imei:" + imei);
-                                //Log.w(TAG,"===>SDPATH:" + AppConstants.getMediaSdFolder());
-                                //Log.w(TAG,"===>MODEL:" + Build.MODEL);
-                                //Log.w(TAG,"--->" + AmlogicExt.getExternalStorage2Directory().getPath());
-
-                            }
-//                            String playURL = respObj.optString("link","");
-//                            if (!TextUtils.isEmpty(playURL))
-//                            {
-//                                playURL = playURL.trim();
-//                                Log.w(LOGCAT,"===>playURL:" + playURL);
-//                                Log.w(LOGCAT,"===>CLIENT_CUR_PLAYURL:" + AppConstants.CLIENT_CUR_PLAYURL);
-//                                if (!playURL.equals(AppConstants.CLIENT_CUR_PLAYURL))
-//                                {
-//                                    AppConstants.CLIENT_CUR_PLAYURL = playURL;
-//                                    //保存URL到配置文件
-//                                    File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
-//                                    mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
-//                                    mPropertiesUtil.setPlayUrl(AppConstants.CLIENT_CUR_PLAYURL);
-//                                    mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
-//                                    IJetty.getInstance().mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//                                    IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_CUR_PLAYURL);
-//                                }
-//                            }
-                            
-                            String playListVersion = respObj.optString("version_program","");
-                            if (!playListVersion.equals(PlayListUtil.playListVersion))
-                            {
-                                //Log.w(LOGCAT,"===>playListVersion:" + playListVersion);
-                                //保存播单版本到配置文件
-                                File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
-                                mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
-                                mPropertiesUtil.setPlayListVersion(playListVersion);//保存节目单推送版本记录
-                                mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
-                                PlayListUtil.playListVersion = playListVersion;
-                                PlayListUtil.isPlayListChanged = true;//转PlayList线程处理
-                            }
-
-                            String apkPushVersion = respObj.optString("version_apk","");
-                            if(!apkPushVersion.equals(ApkUtils.apkPushVersion))
-                            {
-                                File clientProps = new File(IJetty.__JETTY_DIR + "/" + IJetty.__ETC_DIR + "/properties.xml");
-                                mPropertiesUtil.readPropertiesFileFromXML(clientProps.getAbsolutePath());
-                                mPropertiesUtil.setApkPushVersion(apkPushVersion);//保存APK推送版本记录
-                                mPropertiesUtil.writePropertiesFileToXML(clientProps.getAbsolutePath());
-                                ApkUtils.apkPushVersion = apkPushVersion;
-                                ApkUtils.isApkChanged = true;//转apk线程处理
-                            }
-                            
-                            //urlplaylist处理
-                            if(!AppConstants.URLPLAYLIST.isEmpty())
-                            {
-                                Log.e(LOGCAT, "AppConstants.URLPLAYLIST:=" + AppConstants.URLPLAYLIST);
-                                JSONArray jsonar=null;
-                                String playUrl = "";
-                                try {
-                                    jsonar = new JSONArray(AppConstants.URLPLAYLIST);
-                                    for(int i=0; i<jsonar.length(); i++)
-                                    {
-                                        JSONObject oj = jsonar.getJSONObject(i);
-                                        Long tsStart = Long.parseLong(oj.getString("time_start"));
-                                        Long tsEnd = Long.parseLong(oj.getString("time_end"));
-                                        Long tsNow = System.currentTimeMillis()/1000;
-                                        String ts = tsNow.toString();
-                                        Log.v(LOGCAT, "=============================");
-                                        Log.v(LOGCAT, DateUtils.getDateToString(tsStart) + "(Start)");
-                                        Log.v(LOGCAT, DateUtils.getDateToString(tsNow) + "(Now)");
-                                        Log.v(LOGCAT, DateUtils.getDateToString(tsEnd) + "(End)");
-                                        Log.v(LOGCAT, "=============================");
-                                        if(tsStart < tsNow && tsNow < tsEnd)
-                                        {
-                                            playUrl = oj.getString("url");
-                                            //Log.v(LOGCAT,playUrl);
-                                            break;
-                                        }
-                                    }
-                                    Log.e(LOGCAT, "********************************************");
-                                    Log.e(LOGCAT, "playUrl:" + playUrl);
-                                    Log.e(LOGCAT, "");Log.e(LOGCAT, "AppConstants.CLIENT_CUR_PLAYURL:" + AppConstants.CLIENT_CUR_PLAYURL);
-                                    Log.e(LOGCAT, "********************************************");
-                                    if(!playUrl.isEmpty() && !playUrl.equals(AppConstants.CLIENT_CUR_PLAYURL))
-                                    {
-                                        IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                                        //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
-                                        IJetty.getInstance().mWebView.clearHistory();
-                                        IJetty.getInstance().mWebView.clearFormData();
-                                        IJetty.getInstance().mWebView.clearCache(true);
-                                        
-                                        //IJetty.getInstance().mWebView.setIntegerProperty("loadUrlTimeoutValue", 60000);
-                                        IJetty.getInstance().mWebView.loadUrl(playUrl);
-                                        AppConstants.CLIENT_CUR_PLAYURL = playUrl;
-                                    }
-                                    if(playUrl.isEmpty() && !AppConstants.CLIENT_CUR_PLAYURL.equals(AppConstants.CLIENT_DEFAULT2_PLAYURL))
-                                    {
-                                        IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                                        //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
-                                        IJetty.getInstance().mWebView.clearHistory();
-                                        IJetty.getInstance().mWebView.clearFormData();
-                                        IJetty.getInstance().mWebView.clearCache(true);
-                                        IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_DEFAULT2_PLAYURL);
-                                        AppConstants.CLIENT_CUR_PLAYURL = AppConstants.CLIENT_DEFAULT2_PLAYURL;
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            else
-                            {
-                                if(!AppConstants.CLIENT_CUR_PLAYURL.equals(AppConstants.CLIENT_DEFAULT2_PLAYURL))
-                                {
-                                    IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                                    //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
-                                    IJetty.getInstance().mWebView.clearHistory();
-                                    IJetty.getInstance().mWebView.clearFormData();
-                                    IJetty.getInstance().mWebView.clearCache(true);
-                                    IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_DEFAULT2_PLAYURL);                                    
-                                    AppConstants.CLIENT_CUR_PLAYURL = AppConstants.CLIENT_DEFAULT2_PLAYURL;
-                                }
-                            }
-                            
-                            //refresh
-                            boolean refreshStatus = respObj.optBoolean("refresh");//optString("refresh","");
-                            //Log.w(LOGCAT,"refreshStatus:" + refreshStatus);
-                            if(refreshStatus)
-                            {
-                                IJetty.getInstance().mWebView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                                //mWebView.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE);
-                                IJetty.getInstance().mWebView.clearHistory();
-                                IJetty.getInstance().mWebView.clearFormData();
-                                IJetty.getInstance().mWebView.clearCache(true);
-                                IJetty.getInstance().mWebView.reload();
-                                //IJetty.getInstance().mWebView.loadUrl(AppConstants.CLIENT_CUR_PLAYURL);
-                                InterfaceOp.protoRefreshConfirm(new IRequestListener()
-                                {
-                                    public void onError(Exception e)
-                                    {
-                                        LogUtil.log("protoRefreshConfirm onError: " + e.getMessage());
-                                    }
-
-                                    public void onComplete(boolean isError, String errMsg, JSONObject respObj)
-                                    {
-                                        //Log.e("smallstar", "heartbeat onComplete=>isError: " + isError + "  respObj:" + respObj);
-                                        if (isError || (respObj == null))
-                                        {
-                                            return;
-                                        }
-                                        String result = respObj.optString("result","");
-                                        if (!result.equals("true"))
-                                        {
-                                            Log.w("protoRefreshConfirm return",result);
-                                            return;
-                                        }
-                                    }
-                                });
-                            }
+                            updateGroupId(respObj.optString("group_id",""));
+                            //TODO:通过PlayLink功能，强制终端一直播放指定连接
+                            //updatePlayLink(respObj.optString("link",""));
+                            updatePlayList(respObj.optString("version_program",""));
+                            updateApks(respObj.optString("version_apk",""));
+                            updateRefresh(respObj.optBoolean("refresh"));
+                            UpdateUrlPlaylist();
                         }
                     });
                 }
